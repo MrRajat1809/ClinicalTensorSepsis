@@ -1,0 +1,183 @@
+{
+  "schema_version": "1.0.0",
+  "scope": "Shared retrospective tensor contract; source adapters must establish equivalent clinical evidence before assigning a channel. This schema does not establish cross-dataset cohort equivalence.",
+  "policy": {
+    "schema_version": "1.0.0",
+    "time_semantics": "Retrospective event-time trajectories; storetime is not an online availability gate",
+    "unknown_death_time": "Retain cohort and mortality label; all temporal bins structural when hospital death is recorded without a death timestamp. Do not invent a death time or release potentially post-death physiology.",
+    "derived_bounds": {
+      "pf_ratio": [
+        1,
+        4000
+      ],
+      "neq": [
+        0,
+        24.5
+      ],
+      "vent": [
+        0,
+        1
+      ]
+    },
+    "hours": 24,
+    "tensor_dtype": "float64",
+    "aggregation": {
+      "hr": "max",
+      "map": "min",
+      "rr": "max",
+      "temp_c": "mean",
+      "spo2": "min",
+      "gcs_eye": "coherent_gcs",
+      "gcs_verbal": "coherent_gcs",
+      "gcs_motor": "coherent_gcs",
+      "pao2": "max",
+      "fio2": "max",
+      "pf_ratio": "paired_min",
+      "paco2": "max",
+      "lactate": "max",
+      "creatinine": "max",
+      "bun": "max",
+      "bilirubin": "max",
+      "platelets": "min",
+      "wbc": "max",
+      "hemoglobin": "min",
+      "ph": "min",
+      "pt": "max",
+      "aptt": "max",
+      "albumin": "min",
+      "potassium": "mean",
+      "sodium": "mean",
+      "glucose": "max",
+      "chloride": "mean",
+      "urine_output": "validated_volume_sum",
+      "neq": "concurrent_peak",
+      "vent": "any_invasive_with_coverage",
+      "anion_gap": "max",
+      "bicarbonate": "min",
+      "calcium_total": "mean",
+      "hematocrit": "min",
+      "magnesium": "mean",
+      "phosphate": "mean",
+      "inr": "max",
+      "lymphocytes_pct": "mean",
+      "monocytes_pct": "mean",
+      "neutrophils_pct": "mean",
+      "basophils_pct": "mean",
+      "eosinophils_pct": "mean",
+      "alt": "max",
+      "alp": "max",
+      "ast": "max",
+      "mch": "mean",
+      "mchc": "mean",
+      "mcv": "mean",
+      "rdw_cv": "mean",
+      "rbc": "mean"
+    },
+    "window": "[onset, min(onset+24h, ICU discharge, recorded death)); partial hours retained with exact exposure seconds",
+    "direct_values": "Accepted canonical values only; exact duplicates at source/item/specimen/time/value collapse; no conversion, clipping or imputation here",
+    "gcs": "Choose the complete assessment with lowest total GCS in each hour, latest on ties; if none is complete choose the latest partial assessment. Never independently minimize components from different timestamps.",
+    "neq": {
+      "name": "Goradia 2021 five-extracted-drug subset",
+      "coefficients": {
+        "norepinephrine": 1,
+        "epinephrine": 1,
+        "phenylephrine": 0.1,
+        "dopamine": 0.01,
+        "vasopressin": 2.5
+      },
+      "unit": "mcg/kg/min",
+      "vasopressin_input_unit": "units/min",
+      "unextracted_agents": [
+        "metaraminol",
+        "angiotensin_ii"
+      ],
+      "semantics": "Sum concurrent recorded rates, then hourly maximum. Not a complete vasopressor inventory. Dobutamine is not included. No 60-minute SOFA gate, weight fallback or zero inferred from absent treatment records.",
+      "overlaps": "Identical rates for the same drug collapse; conflicting simultaneous rates or an unusable active rate invalidate that hour. Unresolved infusion endpoints withhold NEQ for the stay. Identical overlapping records are not assumed to be separate additive pumps.",
+      "coverage": "Only documented infusion intervals establish NEQ coverage; no-record gaps remain unknown, not zero."
+    },
+    "static_features": [
+      {
+        "name": "age",
+        "role": "admission_context",
+        "predictor_default": true
+      },
+      {
+        "name": "gender",
+        "role": "recorded_category",
+        "predictor_default": true
+      },
+      {
+        "name": "race",
+        "role": "recorded_combined_race_ethnicity_category",
+        "predictor_default": true
+      },
+      {
+        "name": "admission_type",
+        "role": "recorded_category",
+        "predictor_default": true
+      },
+      {
+        "name": "first_careunit",
+        "role": "recorded_category",
+        "predictor_default": true
+      },
+      {
+        "name": "charlson_comorbidity_index",
+        "role": "retrospective_admission_wide_context",
+        "predictor_default": false
+      },
+      {
+        "name": "baseline_sofa",
+        "role": "assumed_zero_not_measured_baseline",
+        "predictor_default": false
+      },
+      {
+        "name": "baseline_pf_ratio",
+        "role": "retrospective_pre_onset_paired_pf_context",
+        "predictor_default": false
+      }
+    ],
+    "category_policy": "Fixed vocabulary indices, not fitted category codes and not ordinal quantities. Raw labels remain in cohort metadata. Unknown/unmapped labels are NaN. Other source adapters require explicit mappings; matching integer codes alone does not establish cross-source equivalence."
+  },
+  "observed_only_features": [
+    "gcs_eye",
+    "gcs_verbal",
+    "gcs_motor",
+    "pf_ratio",
+    "urine_output",
+    "neq",
+    "vent"
+  ],
+  "axes": [
+    "patient",
+    "hour_after_onset",
+    "feature_registry_order"
+  ],
+  "missingness": {
+    "missing_value": "NaN; zero is an observed value only with supporting evidence",
+    "structural": "exposure_seconds == 0; never impute",
+    "within_followup_missing": "isnan(tensor_observed) & (exposure_seconds > 0)[..., None]",
+    "observed": "observation_counts > 0; must equal isfinite(tensor_observed)",
+    "unsupported_channel": "Preserve the feature position as NaN and declare source unavailability; never fabricate observations or silently impute a channel unsupported by that source."
+  },
+  "identifiers": {
+    "row_alignment": "Tensor rows, labels, static features, exposure, method codes and cohort metadata must use the same patient order.",
+    "cross_dataset_key": [
+      "source_database",
+      "stay_id"
+    ],
+    "split_unit": "Patient; overlapping patients across source databases require a shared grouping before evaluation."
+  },
+  "imputation": {
+    "observations": "Preserve every observed value exactly.",
+    "fit": "Fit scalers, medians and model weights on training patients only; select methods using validation patients only.",
+    "evaluation": "Final test patients must not fit imputation or transport for an inductive evaluation. Any transductive use must be declared separately.",
+    "artifacts": "Save model weights, preprocessing statistics, feature order, selected methods, patient partitions and fixed evaluation holdouts.",
+    "transfer": "Weights are not part of the common schema. Source-only transfer must reuse the fitted source preprocessing and feature order; target adaptation requires a separately declared fitting protocol."
+  },
+  "compatibility": {
+    "temporal": "Match feature concepts, canonical units, order, aggregation, onset definition and follow-up semantics before combining tensors.",
+    "static": "Matching category integers do not establish equivalence; use explicit dataset mappings. Retrospective context must retain its predictor role.",
+    "clinical": "Keep source-specific culture mappings, SOFA evidence availability and cohort deviations in the dataset configuration and audit."
+  }
+}

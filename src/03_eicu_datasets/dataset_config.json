@@ -1,0 +1,871 @@
+{
+  "dataset_version": "1.0.0",
+  "source_database": "eICU-CRD",
+  "source_version": "2.0",
+  "shared_schema_version": "1.0.0",
+  "source_mapping": {
+    "sources": {
+      "chartevents": {
+        "hr": [
+          1
+        ],
+        "map": [
+          2
+        ],
+        "rr": [
+          3
+        ],
+        "temp_c": [
+          4
+        ],
+        "spo2": [
+          5
+        ],
+        "gcs_eye": [
+          6
+        ],
+        "gcs_verbal": [
+          7
+        ],
+        "gcs_motor": [
+          8
+        ],
+        "fio2": [
+          9
+        ],
+        "oxygen_device": [
+          10
+        ],
+        "ventilator_mode": [
+          11
+        ]
+      },
+      "labevents": {
+        "pao2": [
+          12
+        ],
+        "paco2": [
+          13
+        ],
+        "fio2": [
+          14
+        ],
+        "ph": [
+          15
+        ],
+        "lactate": [
+          16
+        ],
+        "creatinine": [
+          17
+        ],
+        "bun": [
+          18
+        ],
+        "bilirubin": [
+          19
+        ],
+        "platelets": [
+          20
+        ],
+        "wbc": [
+          21
+        ],
+        "hemoglobin": [
+          22
+        ],
+        "pt": [
+          23
+        ],
+        "aptt": [
+          24
+        ],
+        "albumin": [
+          25
+        ],
+        "potassium": [
+          26
+        ],
+        "sodium": [
+          27
+        ],
+        "glucose": [
+          28
+        ],
+        "chloride": [
+          29
+        ],
+        "anion_gap": [
+          30
+        ],
+        "bicarbonate": [
+          31
+        ],
+        "hematocrit": [
+          32
+        ],
+        "rbc": [
+          33
+        ],
+        "mch": [
+          34
+        ],
+        "mchc": [
+          35
+        ],
+        "mcv": [
+          36
+        ],
+        "inr": [
+          38
+        ],
+        "lymphocytes_pct": [
+          39
+        ],
+        "monocytes_pct": [
+          40
+        ],
+        "neutrophils_pct": [
+          41
+        ],
+        "eosinophils_pct": [
+          42
+        ],
+        "basophils_pct": [
+          43
+        ],
+        "alt": [
+          44
+        ],
+        "ast": [
+          45
+        ],
+        "alp": [
+          46
+        ],
+        "magnesium": [
+          47
+        ],
+        "phosphate": [
+          48
+        ],
+        "calcium_total": [
+          49
+        ],
+        "rdw_cv": [
+          37
+        ]
+      },
+      "inputevents": {
+        "norepinephrine": [
+          51
+        ],
+        "epinephrine": [
+          52
+        ],
+        "phenylephrine": [
+          53
+        ],
+        "dopamine": [
+          54
+        ],
+        "dobutamine": [
+          55
+        ],
+        "vasopressin": [
+          56
+        ]
+      },
+      "outputevents": {
+        "urine_output": [
+          57
+        ],
+        "urine_irrigant_in": [
+          58
+        ],
+        "urine_irrigant_out": [
+          59
+        ]
+      },
+      "procedureevents": {
+        "vent_invasive": [
+          60
+        ],
+        "vent_noninvasive": [
+          61
+        ]
+      }
+    },
+    "evidence_features": {},
+    "itemid_semantics": "Adapter mapping keys only, not native eICU item IDs; source row ID and original labels are retained.",
+    "lab_labels": {
+      "pao2": [
+        "paO2"
+      ],
+      "paco2": [
+        "paCO2"
+      ],
+      "fio2": [
+        "FiO2"
+      ],
+      "ph": [
+        "pH"
+      ],
+      "lactate": [
+        "lactate"
+      ],
+      "creatinine": [
+        "creatinine"
+      ],
+      "bun": [
+        "BUN"
+      ],
+      "bilirubin": [
+        "total bilirubin"
+      ],
+      "platelets": [
+        "platelets x 1000"
+      ],
+      "wbc": [
+        "WBC x 1000"
+      ],
+      "hemoglobin": [
+        "Hgb"
+      ],
+      "pt": [
+        "PT"
+      ],
+      "aptt": [
+        "PTT"
+      ],
+      "albumin": [
+        "albumin"
+      ],
+      "potassium": [
+        "potassium"
+      ],
+      "sodium": [
+        "sodium"
+      ],
+      "glucose": [
+        "glucose",
+        "bedside glucose"
+      ],
+      "chloride": [
+        "chloride"
+      ],
+      "anion_gap": [
+        "anion gap"
+      ],
+      "bicarbonate": [
+        "bicarbonate"
+      ],
+      "hematocrit": [
+        "Hct"
+      ],
+      "rbc": [
+        "RBC"
+      ],
+      "mch": [
+        "MCH"
+      ],
+      "mchc": [
+        "MCHC"
+      ],
+      "mcv": [
+        "MCV"
+      ],
+      "inr": [
+        "PT - INR"
+      ],
+      "lymphocytes_pct": [
+        "-lymphs"
+      ],
+      "monocytes_pct": [
+        "-monos"
+      ],
+      "neutrophils_pct": [
+        "-polys"
+      ],
+      "eosinophils_pct": [
+        "-eos"
+      ],
+      "basophils_pct": [
+        "-basos"
+      ],
+      "alt": [
+        "ALT (SGPT)"
+      ],
+      "ast": [
+        "AST (SGOT)"
+      ],
+      "alp": [
+        "alkaline phos."
+      ],
+      "magnesium": [
+        "magnesium"
+      ],
+      "phosphate": [
+        "phosphate"
+      ],
+      "calcium_total": [
+        "calcium"
+      ],
+      "rdw_cv": [
+        "RDW"
+      ]
+    },
+    "urine_leaves": [
+      "urine",
+      "actual urine",
+      "urine (measured)",
+      "urine output",
+      "foley",
+      "indwelling foley",
+      "urethral catheter",
+      "urine catheter",
+      "urine-foley",
+      "urine- foley",
+      "urine output-foley",
+      "urine foley catheter",
+      "straight cath",
+      "straight catheterization urine",
+      "straight cath urine",
+      "straight cath uop",
+      "straight catheter output",
+      "condom catheter",
+      "condom cath",
+      "condom catheter output",
+      "urine via condom catheter",
+      "suprapubic urine output",
+      "nephrostomy",
+      "urine, l neph:",
+      "urine, r neph:"
+    ],
+    "infusion_names": {
+      "norepinephrine": [
+        "norepinephrine",
+        "noradrenaline",
+        "levophed"
+      ],
+      "epinephrine": [
+        "epinephrine",
+        "adrenaline"
+      ],
+      "phenylephrine": [
+        "phenylephrine",
+        "neosynephrine",
+        "neo-synephrine"
+      ],
+      "dopamine": [
+        "dopamine"
+      ],
+      "dobutamine": [
+        "dobutamine",
+        "dobutrex"
+      ],
+      "vasopressin": [
+        "vasopressin"
+      ]
+    },
+    "respiratory_labels": {
+      "fio2": [
+        "FiO2",
+        "FiO2 (%)",
+        "Oxygen Percentage"
+      ],
+      "ventilator_mode": [
+        "Ventilator Mode",
+        "Vent Mode"
+      ],
+      "oxygen_device": [
+        "Oxygen Device",
+        "O2 Device"
+      ]
+    },
+    "invasive_airways": [
+      "oral ett",
+      "nasal ett",
+      "tracheostomy"
+    ],
+    "device_aliases": {
+      "oral ett": "endotracheal tube",
+      "nasal ett": "endotracheal tube",
+      "tracheostomy": "tracheostomy tube",
+      "nasal cannula": "nasal cannula",
+      "room air": "none",
+      "bipap mask": "bipap mask",
+      "cpap mask": "cpap mask"
+    }
+  },
+  "infection_policy": {
+    "schema_version": "1.0.0",
+    "diagnostic_specimens": {
+      "1": "BLOOD",
+      "2": "URINE",
+      "3": "SPUTUM",
+      "4": "TRACHEAL ASPIRATE",
+      "5": "BRONCHIAL WASH",
+      "6": "BRONCHOALVEOLAR LAVAGE",
+      "7": "CSF",
+      "8": "CEREBROSPINAL FLUID",
+      "9": "PLEURAL FLUID",
+      "10": "PERITONEAL FLUID",
+      "11": "WOUND",
+      "12": "ABSCESS",
+      "13": "BONE",
+      "14": "TISSUE",
+      "15": "BLOOD, VENIPUNCTURE",
+      "16": "BLOOD, CENTRAL LINE",
+      "17": "URINE, CATHETERIZED",
+      "18": "URINE, CLEAN CATCH",
+      "19": "SPUTUM, EXPECTORATED",
+      "20": "SPUTUM, SUCTIONED",
+      "21": "DRAINAGE FLUID",
+      "22": "URINE, CATHETER SPECIMEN",
+      "23": "URINE, VOIDED SPECIMEN",
+      "24": "SPUTUM, TRACHEAL SPECIMEN",
+      "25": "BRONCHIAL LAVAGE",
+      "26": "WOUND, DECUBITUS",
+      "27": "WOUND, DRAINAGE FLUID",
+      "28": "WOUND, SURGICAL"
+    },
+    "unknown_specimen": "Exclude and audit. Ambiguous swab, stool, immune/viral/surveillance and postmortem specimens do not establish primary membership.",
+    "evidence": "Exact culture-site allowlist proxy; eICU has no diagnostic-test name. Negative cultures are retained.",
+    "deduplication": "stay/cultureTakenOffset/cultureSite; susceptibility result rows collapse.",
+    "cancelled_test": "Exclude groups consisting only of CANCELLED/CANCELED results.",
+    "specimen_name_normalization": "Uppercase, trim and collapse whitespace in both observed and configured specimen names. Null, empty and whitespace-only observed names are rejected as missing_specimen_name. Selection and QC apply the identical normalization; raw names remain in evidence.",
+    "source_label_coverage": "Includes explicitly enumerated eICU urine catheter/voided, tracheal sputum, bronchial lavage and wound-site labels. INTRAVENOU and INTRAVEN are accepted intravenous abbreviations. MISC, DEVICE, unknown routes and unspecified culture sites remain excluded; no route is inferred from the drug name.",
+    "documented_infection_proxy": {
+      "enabled": true,
+      "presentation_hours": [
+        -24,
+        24
+      ],
+      "maximum_pair_gap_hours": 24,
+      "diagnosis_patterns": {
+        "systemic_infection": "(^|[^a-z])(sepsis|septicemia|septic shock|urosepsis|bacteremia|fungemia)([^a-z]|$)",
+        "respiratory_infection": "(^|[^a-z])(pneumonia|lung abscess|empyema)([^a-z]|$)",
+        "urinary_infection": "(^|[^a-z])(urinary tract infection|pyelonephritis|renal abscess)([^a-z]|$)",
+        "abdominal_infection": "(^|[^a-z])(peritonitis|cholangitis|intra-abdominal abscess|intraabdominal abscess|hepatic abscess|liver abscess|infectious colitis|clostridium difficile|c[.] difficile)([^a-z]|$)",
+        "skin_soft_tissue_infection": "(^|[^a-z])(cellulitis|necrotizing fasciitis|wound infection|soft tissue infection|infected wound)([^a-z]|$)",
+        "other_local_infection": "(^|[^a-z])(meningitis|encephalitis|brain abscess|endocarditis|osteomyelitis|septic arthritis|catheter infection|catheter-related infection|line infection)([^a-z]|$)"
+      },
+      "excluded_text_pattern": "rule[ -]?out|r/o|history of|prophylax|coloniz|noninfectious|non-infectious|chemical pneumonitis|aspiration pneumonitis|no evidence of infection",
+      "definition": "Explicit configured infection diagnosis text recorded within ICU admission +/-24h and within documented care, plus an eligible IV antimicrobial order start within admission +/-24h and within 24h of that diagnosis entry. Either source alone is insufficient. For each antibiotic start keep the nearest eligible diagnosis, breaking ties by time and ID. All eligible antibiotic starts remain candidates.",
+      "time_anchor": "SIT is the recorded IV order start. DiagnosisOffset dates documentation, not clinical infection onset. Equal timestamp bounds describe a fixed operational anchor, not clinical timing certainty; infection_time_is_proxy=True and clinical_infection_onset_known=False.",
+      "limitations": "Project-specific retrospective infection proxy, not a validated replacement for the culture-based definition. Diagnosis entries can be provisional or later ruled out; eICU does not reliably identify such removals. Pneumonia and similar syndromes can be noninfectious. Sepsis wording incorporates clinicians interpretation of organ dysfunction, causing incorporation bias. IV orders do not prove administration. Early documentation and missing medication names/interfaces select the cohort. Restricting entries to +/-24h excludes infections documented later; no future discharge diagnosis fallback.",
+      "strict_sensitivity": "Culture-paired candidates remain separate. For patients in the proxy cohort, re-adjudicate strict culture SIT with its own [-48h,+24h] SOFA window. Mark strict_culture_sepsis3 on the final cohort; presence of a culture pair alone is not strict Sepsis-3. Saved tensors retain proxy onset, while strict onset/SOFA metadata permit a separate strict-onset analysis.",
+      "reference": "https://eicu.mit.edu/eicutables/diagnosis/"
+    },
+    "main_definition": "documented_infection_plus_iv_order_proxy"
+  },
+  "sofa_policy": {
+    "schema_version": "1.1.0",
+    "definition": "Shared research SOFA operationalization with an explicitly labelled eICU documented-infection/IV-order proxy. Strict culture sensitivity membership is separately adjudicated; main eICU infection ascertainment differs from MIMIC.",
+    "baseline": "Primary baseline SOFA is explicitly assumed zero. Retrospective CCI flags cannot establish pre-infection SOFA. Measured pre-SIT versus post-SIT peak SOFA is a separate sensitivity analysis.",
+    "association_hours": [
+      -48,
+      24
+    ],
+    "rolling_hours": 24,
+    "fio2_lookback_hours": 4,
+    "support_lookback_hours": 4,
+    "minimum_vasoactive_duration_minutes": 60,
+    "urine_minimum_span_hours": 22,
+    "urine_maximum_gap_hours": 2,
+    "urine_boundary_tolerance_hours": 1,
+    "onset": "max(selected suspected infection time, first qualifying SOFA assessment time). SOFA time is an assessment timestamp, not the first one-point abnormality. Date-only onset has a separate upper bound.",
+    "candidate_selection": "Earliest ranked candidate with a qualifying in-ICU assessment. Date-only candidates must qualify inside the intersection of all possible SIT association windows; union-only cases are sensitivity results.",
+    "infection_timing": "Main: documented infection plus IV-order proxy within presentation windows; SIT is IV-order start, explicitly not exact clinical onset. Strict culture pairing and SOFA association are re-adjudicated separately for sensitivity membership.",
+    "exclusive_endpoints": "Exclude the open upper endpoint of the possible SOFA association union. The robust intersection remains closed at its supremum-derived lower bound. Preserve onset upper-end exclusivity unless max(SIT,SOFA time) collapses it to an attained point; follow-up checks use the conservative upper bound.",
+    "missingness": "Keep nullable components and observed-component count. Missing components contribute zero only to the operational total; no observed evidence is not a measured SOFA of zero.",
+    "respiratory_support": "Explicit RespiratoryCare ventilation intervals with invasive airway; or recent explicit airway plus active ventilator mode. No APACHE worst-day values or diagnosis-only ventilation.",
+    "gcs": "Only complete, nonconflicting same-timestamp components; no cross-time minima, normal filling or ETT verbal scoring. Sedation is not adjudicated.",
+    "urine": "Recorded volumes, not assumed hourly rates. Sum positive/zero observations in (t-24h,t]; require full ICU lookback, >=22h timestamp span, <=2h internal gaps and <=1h boundary gaps, with no invalid measurements. Coverage is a documentation proxy, not proof of complete collection. Irrigant subtraction only for same-time paired input/output without concurrent ordinary urine; otherwise withhold urine scoring.",
+    "active_ventilator_modes": [
+      "(s) cmv",
+      "aprv",
+      "aprv/biphasic+apnpress",
+      "aprv/biphasic+apnvol",
+      "apv (cmv)",
+      "apv (simv)",
+      "apnea ventilation",
+      "asv",
+      "cmv",
+      "cmv/assist",
+      "cmv/assist/autoflow",
+      "cmv/autoflow",
+      "cpap",
+      "cpap/pps",
+      "cpap/psv",
+      "cpap/psv+apn tcpl",
+      "cpap/psv+apnpres",
+      "cpap/psv+apnvol",
+      "mmv",
+      "mmv/autoflow",
+      "mmv/psv",
+      "mmv/psv/autoflow",
+      "p-cmv",
+      "p-simv",
+      "pcv+",
+      "pcv+/psv",
+      "pcv+assist",
+      "pres/ac",
+      "prvc/ac",
+      "prvc/simv",
+      "psv/sbt",
+      "simv",
+      "simv/autoflow",
+      "simv/pres",
+      "simv/psv",
+      "simv/psv/autoflow",
+      "simv/vol",
+      "spont",
+      "synchron master",
+      "synchron slave",
+      "vol/ac",
+      "vs"
+    ],
+    "noninvasive_modes": [
+      "niv",
+      "niv-st",
+      "duopap"
+    ],
+    "noninvasive_devices": [
+      "bipap mask",
+      "cpap mask"
+    ],
+    "nonventilated_devices": [
+      "nasal cannula",
+      "none",
+      "face tent",
+      "aerosol-cool",
+      "high flow nasal cannula",
+      "non-rebreather",
+      "high flow neb",
+      "oxymizer",
+      "venti mask",
+      "medium conc mask",
+      "trach mask",
+      "t-piece",
+      "ultrasonic neb",
+      "vapomist"
+    ],
+    "reference_commit": "303d26c623dcc9c49cc0f204468d4acc2f063797",
+    "references": [
+      "https://github.com/MIT-LCP/mimic-code/blob/303d26c623dcc9c49cc0f204468d4acc2f063797/mimic-iv/concepts/score/sofa.sql",
+      "https://github.com/MIT-LCP/mimic-code/blob/303d26c623dcc9c49cc0f204468d4acc2f063797/mimic-iv/concepts/sepsis/sepsis3.sql",
+      "https://jamanetwork.com/journals/jama/fullarticle/2492881"
+    ]
+  },
+  "antimicrobial_names": [
+    "amikacin",
+    "amikin",
+    "amoxicillin",
+    "ampicillin",
+    "unasyn",
+    "augmentin",
+    "azithromycin",
+    "zithromax",
+    "aztreonam",
+    "azactam",
+    "cefazolin",
+    "ancef",
+    "kefzol",
+    "cefepime",
+    "maxipime",
+    "cefotaxime",
+    "claforan",
+    "cefotetan",
+    "cefotan",
+    "cefoxitin",
+    "mefoxin",
+    "ceftaroline",
+    "teflaro",
+    "ceftazidime",
+    "fortaz",
+    "tazicef",
+    "avibactam",
+    "avycaz",
+    "ceftolozane",
+    "zerbaxa",
+    "ceftriaxone",
+    "rocephin",
+    "cefuroxime",
+    "zinacef",
+    "cephalothin",
+    "cephapirin",
+    "chloramphenicol",
+    "ciprofloxacin",
+    "cipro",
+    "clindamycin",
+    "cleocin",
+    "colistin",
+    "colistimethate",
+    "polymyxin",
+    "daptomycin",
+    "cubicin",
+    "doripenem",
+    "doribax",
+    "doxycycline",
+    "vibramycin",
+    "ertapenem",
+    "invanz",
+    "erythromycin",
+    "erythrocin",
+    "gentamicin",
+    "garamycin",
+    "imipenem",
+    "primaxin",
+    "levofloxacin",
+    "levaquin",
+    "linezolid",
+    "zyvox",
+    "meropenem",
+    "merrem",
+    "metronidazole",
+    "flagyl",
+    "minocycline",
+    "minocin",
+    "moxifloxacin",
+    "avelox",
+    "nafcillin",
+    "oxacillin",
+    "penicillin",
+    "pfizerpen",
+    "piperacillin",
+    "zosyn",
+    "rifampin",
+    "rifadin",
+    "streptomycin",
+    "sulfamethoxazole",
+    "trimethoprim",
+    "bactrim",
+    "septra",
+    "smz-tmp",
+    "quinupristin",
+    "dalfopristin",
+    "synercid",
+    "ticarcillin",
+    "timentin",
+    "tigecycline",
+    "tygacil",
+    "tobramycin",
+    "vancomycin",
+    "vancocin",
+    "telavancin",
+    "vibativ",
+    "amphotericin",
+    "ambisome",
+    "abelcet",
+    "amphotec",
+    "anidulafungin",
+    "eraxis",
+    "caspofungin",
+    "cancidas",
+    "fluconazole",
+    "diflucan",
+    "micafungin",
+    "mycamine",
+    "voriconazole",
+    "vfend",
+    "posaconazole",
+    "noxafil"
+  ],
+  "iv_routes": [
+    "IV",
+    "INTRAVENOUS",
+    "IV (INTRAVENOUS)",
+    "IV - CONTINUOUS INFUSION (INTRAVENOUS)",
+    "IV INFUSION",
+    "IV PUSH",
+    "IVPB",
+    "IV PIGGYBACK",
+    "INTRAVENOU",
+    "INTRAVEN",
+    "IV - BRIEF INFUSION (INTRAVENOUS)"
+  ],
+  "implementation_status": "v1.0.0 implementation; cohort execution and master QC pending user run.",
+  "tensor": {
+    "urine": "Use validated same-time net urine evidence from stage 06. Any invalid time withholds the hourly sum. Missing rows remain unknown; recorded zero is observed zero.",
+    "vent": "Explicit RespiratoryCare ventilation intervals with invasive airway; or recent explicit airway plus active ventilator mode. No APACHE worst-day values or diagnosis-only ventilation. Hourly 0 still requires explicit noninvasive/off evidence throughout the available hour.",
+    "missing_category_labels": [
+      "",
+      "UNKNOWN",
+      "OTHER/UNKNOWN"
+    ],
+    "category_vocabularies": {
+      "gender": [
+        "FEMALE",
+        "MALE",
+        "OTHER"
+      ],
+      "race": [
+        "AFRICAN AMERICAN",
+        "ASIAN",
+        "CAUCASIAN",
+        "HISPANIC",
+        "NATIVE AMERICAN"
+      ],
+      "admission_type": [
+        "ELECTIVE",
+        "NON_ELECTIVE",
+        "UNKNOWN_SURGERY_STATUS"
+      ],
+      "first_careunit": [
+        "MICU",
+        "CARDIOVASCULAR ICU",
+        "NEURO ICU",
+        "CCU",
+        "SICU",
+        "ICU",
+        "CCU-CTICU",
+        "CTICU",
+        "CSICU",
+        "VENT ICU",
+        "BURN-TRAUMA ICU",
+        "MED-SURG ICU",
+        "CARDIAC ICU"
+      ]
+    },
+    "category_scope": "eICU category indices are local. Retain source labels; an explicit crosswalk is required before comparing static category codes across databases.",
+    "neq_source_interpretation": "A documented drug rate persists only to the next same-drug record when <=4h apart; unknown terminal endpoints withhold stay NEQ under the shared contract. Unknown treatment is never zero.",
+    "onset_uncertainty": "Retain lower and upper onset bounds in cohort.parquet. Match the frozen MIMIC-IV lower-bound onset binning, with uncertainty explicitly retained."
+  },
+  "imputation": {
+    "schema_version": "1.0.0",
+    "required_pypots_version": "1.5",
+    "seed": 42,
+    "split": {
+      "train_fraction": 0.7,
+      "validation_fraction": 0.15,
+      "method": "Sort SHA-256(seed:subject_id), then take fixed-size train/validation/test partitions; independent of labels and row order."
+    },
+    "holdout_fraction": 0.2,
+    "minimum_training_observations": 50,
+    "log1p_features": [
+      "alp",
+      "alt",
+      "ast",
+      "basophils_pct",
+      "bilirubin",
+      "bun",
+      "creatinine",
+      "eosinophils_pct",
+      "lactate",
+      "monocytes_pct",
+      "wbc"
+    ],
+    "model": {
+      "n_layers": 2,
+      "d_model": 256,
+      "d_ffn": 128,
+      "n_heads": 4,
+      "d_k": 64,
+      "d_v": 64,
+      "dropout": 0.1,
+      "attn_dropout": 0,
+      "diagonal_attention_mask": true,
+      "ORT_weight": 1,
+      "MIT_weight": 2
+    },
+    "defaults": {
+      "epochs": 60,
+      "patience": 8,
+      "batch_size": 64
+    },
+    "semantics": [
+      "Retrospective bidirectional SAITS with validation-selected baselines; use the saved patient partitions downstream.",
+      "Training-only transforms and weights; disjoint early-stopping and method-selection validation patients; no test-based tuning.",
+      "Observed values are unchanged. Structural follow-up, observed-only channels and patients without continuous context remain missing.",
+      "Out-of-bounds SAITS predictions use the selected baseline; method codes and rejection masks record every fill.",
+      "Artificial holdouts do not reveal accuracy at naturally missing cells or establish clinical validity.",
+      "SAITS has no dedicated structural attention-padding mask; structural cells have zero observed/target masks."
+    ],
+    "references": [
+      "https://github.com/WenjieDu/PyPOTS/blob/v1.5/pypots/imputation/saits/model.py",
+      "https://github.com/WenjieDu/PyPOTS/blob/v1.5/pypots/imputation/saits/data.py"
+    ],
+    "minimum_training_patients": 25,
+    "final_recipe": {
+      "rules": {
+        "minimum_targets": 25,
+        "minimum_target_patients": 10,
+        "maximum_saits_projection_fraction": 0.05,
+        "maximum_scenario_regret": 0.05,
+        "minimum_mean_improvement": 0.01,
+        "whole_channel_patients_per_feature": 128,
+        "stopping_patients_per_scenario": 512,
+        "stopping_channel_patients_per_feature": 16
+      },
+      "training_mask_mixture": {
+        "point": 0.3333333333333333,
+        "block6h": 0.3333333333333333,
+        "whole_channel": 0.3333333333333333
+      },
+      "whole_channel_training_sampling": "Inverse square root of training-patient feature coverage",
+      "training_loss": "Mean of per-feature masked Huber losses, delta=1 in train-standardized space",
+      "validation_metric": "Mean of per-feature masked MAE in train-standardized space",
+      "validation_subsets": "First half of hash-ordered validation: early stopping; second half: method selection",
+      "method_selection": "Best baseline by equal-scenario normalized MAE; accept SAITS only with adequate coverage, low projection, <=5% regret against BOTH baselines in every scenario and >=1% mean gain against the selected baseline",
+      "insufficient_validation": "Training median; explicitly marked insufficient evidence",
+      "test": "All three fixed scenarios scored only after checkpoint and feature methods are locked; never used for selection",
+      "fallback": "Forward fill uses only earlier observed values; training median before the first measurement or if the channel is entirely missing",
+      "natural_projection": "Out-of-bounds SAITS cells use the preselected baseline, with per-cell fallback reason; no clipped SAITS fills"
+    },
+    "fitting_protocol": "Separate eICU SAITS, scalers, medians and method selection using eICU training/validation subjects only. This is within-dataset imputation, not source-only transfer. For unseen-target evaluation, fit preprocessing only under that separate experiment protocol.",
+    "artifact_namespace": "data/processed/eicu and outputs/eicu"
+  },
+  "eicu": {
+    "raw_directory": "data/raw/eicu-crd/2.0",
+    "time": "Every timestamp is an artificial 2000-01-01 ICU origin plus recorded minute offset. Never compare these artificial dates across stays; preserve offsets, hospitalID and uniquepid in cohort metadata.",
+    "first_stay": "Require one recorded hospital encounter per uniquepid because encounters cannot reliably be chronologically ordered. Within that encounter rank ALL unit stays by descending hospitalAdmitOffset before age/type/clinical filtering; tied or missing offsets make first stay ambiguous and exclude that subject. No replacement by a later eligible stay. This excludes repeat-hospitalization patients and is not lifetime first ICU.",
+    "age": "Source age >89 becomes 91 with age_is_deidentified. This project proxy is not exact age.",
+    "admission": "Exclude explicit APACHE elective surgery=1; retain missing/unknown surgery as UNKNOWN_SURGERY_STATUS. This surgery indicator is not the MIMIC elective-admission field. Exclude known non-ICU/stepdown/test unit types; unknown unit types fail with a vocabulary report.",
+    "mortality": "Hospital discharge Alive/Expired defines the label; unknown and contradictory hospital/unit status are excluded explicitly. No exact death timestamp is supplied. Expired ICU discharge offset, otherwise expired hospital discharge offset, is a terminal-care proxy in hospital_deathtime; death_time_is_proxy and death_time_basis disclose this. No claim of exact death timing. Inconsistent end-of-care intervals are excluded.",
+    "infection": "Explicit configured infection diagnosis text recorded within ICU admission +/-24h and within documented care, plus an eligible IV antimicrobial order start within admission +/-24h and within 24h of that diagnosis entry. Either source alone is insufficient. For each antibiotic start keep the nearest eligible diagnosis, breaking ties by time and ID. All eligible antibiotic starts remain candidates. Project-specific retrospective infection proxy, not a validated replacement for the culture-based definition. Diagnosis entries can be provisional or later ruled out; eICU does not reliably identify such removals. Pneumonia and similar syndromes can be noninfectious. Sepsis wording incorporates clinicians interpretation of organ dysfunction, causing incorporation bias. IV orders do not prove administration. Early documentation and missing medication names/interfaces select the cohort. Restricting entries to +/-24h excludes infections documented later; no future discharge diagnosis fallback. Strict culture pairing is a sensitivity analysis because microLab coverage is sparse; missing culture is not a negative culture.",
+    "culture_sites": "Exact normalized site allowlist is a research proxy, not diagnostic intent adjudication. Screening sites and unrecognized site names are excluded and counted. Same-stay/site/time result rows are grouped; source specimen IDs are unavailable.",
+    "labs": "Exact configured labels plus explicit source units. Conflicting or missing dimensional units are withheld, except explicitly documented fixed-unit fields. PaO2/PaCO2 require labTypeID=7 ABG evidence. This source category is an arterial proxy, not a specimen-level confirmation; same-time groups are inferred, not physical specimen IDs. Blood gas HCO3 is not merged into chemistry bicarbonate. Superseded revisions and exact duplicate records are retained as rejected evidence; conflicting latest results are withheld. Unitless FiO2 is interpreted only within disjoint documented percent/fraction ranges 20-100 or 0.2-1; intermediate ambiguous values are rejected.",
+    "infusion": "Use strictly numeric drugRate and explicit units in drugName; never use default concentrations or substitute infusionRate. Hold to next record of same drug <=4h, including invalid changes which terminate previous evidence. Equal-time differing rate/unit records conflict. No terminal extrapolation; continuous-duration SOFA threshold remains shared.",
+    "weight": "Only patientWeight on the same infusion record, recorded in kg, may convert an absolute rate. No admission-weight or population fallback; shared 20-400kg screening applies.",
+    "urine": "Only configured measured-volume cell paths under Output (ml); never cumulative outputTotal. Exact source duplicates collapse; ambiguous same-time parallel urinary labels or irrigation evidence withhold urine. Counts, shift totals and unmeasured events are not volume observations. Documentation-span coverage is not proof of collection completeness.",
+    "gcs": "Strict numeric same-time Eyes/Verbal/Motor nursing components. Sedation and ETT/unassessable verbal responses are not normal-filled. APACHE worst-day values are never placed at an invented hour.",
+    "ventilation": "Explicit RespiratoryCare ventilation intervals with invasive airway; or recent explicit airway plus active ventilator mode. No APACHE worst-day values or diagnosis-only ventilation. Missing vent endpoints or unknown device/mode labels remain unavailable. Airway alone is not mechanical ventilation.",
+    "diagnoses": "Retrospective ICU diagnosis codes, not complete hospital discharge coding. Split comma-separated ICD9/10 tokens. Numeric tokens are ICD9; unambiguous non-E/V alphabetic tokens are ICD10; dotted E## codes are ICD10 and E### codes ICD9. V codes and unresolved E codes are withheld because the version cannot be established. Primary/major priorities approximate MIMIC leading diagnoses for alternative flags only; no phenotype exclusions. Zero Charlson means no mapped available code, not absence of disease.",
+    "generalization": "Multicenter eICU recording interfaces and treatment practices differ from BIDMC. Patient-level SAITS partitions permit hospitals in multiple partitions; they are not held-out-hospital validation. Preserve hospitalID for downstream site-based evaluation and refit preprocessing within those folds.",
+    "comparability": "Shared 50-feature order, units, bounds, Sepsis-3 operational thresholds, tensor masks and imputation/QC code do not remove source selection or measurement bias. A contract QC pass does not establish clinical adjudication or causal transportability.",
+    "rate_unit_aliases": {
+      "mcg/kg/hr": "mcg/kg/hour",
+      "mcg/hr": "mcg/hour",
+      "mg/hr": "mg/hour",
+      "units/hr": "units/hour",
+      "unit/min": "units/min",
+      "u/min": "units/min",
+      "u/hr": "units/hour"
+    },
+    "excluded_unit_types": [
+      "SDU/STEPDOWN",
+      "VICU",
+      "VIRTUAL ICU",
+      "MOBILE ICU",
+      "TEST ICU"
+    ],
+    "references": [
+      "https://eicu.mit.edu/eicutables/patient/",
+      "https://eicu.mit.edu/eicutables/medication/",
+      "https://eicu.mit.edu/eicutables/microlab/",
+      "https://eicu.mit.edu/eicutables/lab/",
+      "https://eicu.mit.edu/eicutables/infusiondrug/",
+      "https://eicu.mit.edu/eicutables/nursecharting/",
+      "https://eicu.mit.edu/eicutables/intakeoutput/",
+      "https://eicu.mit.edu/eicutables/respiratorycare/",
+      "https://eicu.mit.edu/eicutables/respiratorycharting/",
+      "https://eicu.mit.edu/eicutables/diagnosis/",
+      "https://github.com/MIT-LCP/eicu-code/blob/main/concepts/pivoted/pivoted-gcs.sql",
+      "https://github.com/MIT-LCP/eicu-code/blob/main/concepts/pivoted/pivoted-uo.sql",
+      "https://github.com/MIT-LCP/eicu-code/blob/main/concepts/pivoted/pivoted-lab.sql"
+    ],
+    "infection_sensitivity": "Culture-paired candidates remain separate. For patients in the proxy cohort, re-adjudicate strict culture SIT with its own [-48h,+24h] SOFA window. Mark strict_culture_sepsis3 on the final cohort; presence of a culture pair alone is not strict Sepsis-3. Saved tensors retain proxy onset, while strict onset/SOFA metadata permit a separate strict-onset analysis."
+  }
+}

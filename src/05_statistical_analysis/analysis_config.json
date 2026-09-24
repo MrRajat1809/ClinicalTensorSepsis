@@ -1,0 +1,101 @@
+{
+  "version": "1.0.0",
+  "seed": 20260917,
+  "datasets": [
+    "mimiciv",
+    "mimic3-carevue",
+    "eicu"
+  ],
+  "reference": "mimiciv",
+  "bootstrap_replicates": 2000,
+  "confidence_level": 0.95,
+  "minimum_patients": 20,
+  "minimum_valid_bootstrap_fraction": 0.9,
+  "clinical_features": [
+    "hr",
+    "map",
+    "rr",
+    "lactate",
+    "creatinine",
+    "platelets",
+    "bilirubin",
+    "fio2"
+  ],
+  "imputation": {
+    "scenarios": [
+      "point",
+      "block6h",
+      "whole_channel"
+    ],
+    "comparators": [
+      "median",
+      "forward_fill"
+    ],
+    "tail_quantiles": [
+      0.1,
+      0.9
+    ],
+    "error_quantiles": [
+      0,
+      0.1,
+      0.25,
+      0.5,
+      0.75,
+      0.9,
+      0.95,
+      0.99,
+      1
+    ],
+    "replay_rtol": 0.0001,
+    "replay_atol": 1e-05
+  },
+  "transport": {
+    "geometry_pairs": 2000,
+    "primary_comparison": "selected_minus_unadapted",
+    "preservation_limits": "Read existing engineering tolerances from the certified atlas configuration; do not select new limits from these results."
+  },
+  "protocol": {
+    "analysis_status": "post_hoc_dataset_validation; previous test exposure retained",
+    "selection": "No cohort deletion, feature dropping, imputation reselection or transport reselection. No outcome-prediction models are fitted.",
+    "inference": "One independent contribution per patient; repeated hours stay within patient. Within-source comparisons only for independent-sample tests. Clinical summaries use observed values only.",
+    "interpretation": "Report effect sizes, confidence intervals, test statistics, p-values and Benjamini-Hochberg q-values within named families. No significance-based QC gate, biological invariance claim or test-based method reselection.",
+    "coverage": "Keep all clinical patients. Atlas analyses use eligible patients; unsupported eligible targets keep their original embeddings. Report unscorable groups explicitly.",
+    "small_groups": "Bootstrap intervals require minimum_patients. Wilson proportions and Newcombe-Wilson risk differences remain available for nonempty binary groups, including zero events, with denominators shown.",
+    "demographics": "Age retains source deidentification. Gender and race use recorded source labels; no forced cross-source vocabulary equivalence and no inference of biological sex or ancestry.",
+    "source_limits": "Cross-version MIMIC person independence is unknown. eICU patient splits are not unseen-hospital validation. Strict-culture subgroup tensors retain proxy onset; small subgroup estimates are descriptive.",
+    "execution": "Run scripts sequentially. Each script replaces only its own tables and updates one shared manifest. Analysis QC checks implementation and provenance, never requires favorable scientific results."
+  },
+  "references": {
+    "statistical_evidence": "https://www.amstat.org/asa/files/pdfs/P-ValueStatement.pdf",
+    "structured_imputation_masks": "https://arxiv.org/abs/2405.17508",
+    "independent_tests": "https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.mannwhitneyu.html",
+    "variance_test": "https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.levene.html",
+    "welch_anova": "https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.f_oneway.html"
+  },
+  "readiness": {
+    "minimum_patient_coverage": 0.05,
+    "minimum_hospital_patients": 30,
+    "generated_fraction_warning": 0.8,
+    "interpretation": "Coverage/constant-value/imputation flags support later feature selection; they never remove patients or features and are not universal clinical thresholds."
+  },
+  "tests": {
+    "minimum_hospital_patients": 30,
+    "selection": [
+      "welch_t",
+      "mann_whitney_u",
+      "fisher_exact"
+    ],
+    "paired": [
+      "paired_t",
+      "paired_sign"
+    ],
+    "site": [
+      "welch_anova",
+      "kruskal_wallis",
+      "brown_forsythe",
+      "chi_square"
+    ],
+    "multiplicity": "BH within dataset, question, population, scenario, comparator and test; all tested features/strata in that family.",
+    "assumptions": "Welch tests allow unequal variances and rely on independent patient summaries and adequate sample size. U/Kruskal-Wallis test distributions; medians alone are not their general null. Hospital differences mix case mix and recording effects. Constant/small groups receive explicit unavailable tests."
+  }
+}

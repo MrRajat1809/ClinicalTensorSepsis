@@ -1,0 +1,284 @@
+{
+  "schema_version": "1.0.0",
+  "temporal_features": [
+    {
+      "name": "hr",
+      "canonical_unit": "beats/min",
+      "derived": false
+    },
+    {
+      "name": "map",
+      "canonical_unit": "mmHg",
+      "derived": false
+    },
+    {
+      "name": "rr",
+      "canonical_unit": "breaths/min",
+      "derived": false
+    },
+    {
+      "name": "temp_c",
+      "canonical_unit": "degC",
+      "derived": false
+    },
+    {
+      "name": "spo2",
+      "canonical_unit": "%",
+      "derived": false
+    },
+    {
+      "name": "gcs_eye",
+      "canonical_unit": "score",
+      "derived": false
+    },
+    {
+      "name": "gcs_verbal",
+      "canonical_unit": "score",
+      "derived": false
+    },
+    {
+      "name": "gcs_motor",
+      "canonical_unit": "score",
+      "derived": false
+    },
+    {
+      "name": "pao2",
+      "canonical_unit": "mmHg",
+      "derived": false
+    },
+    {
+      "name": "fio2",
+      "canonical_unit": "fraction",
+      "derived": false
+    },
+    {
+      "name": "pf_ratio",
+      "canonical_unit": "mmHg",
+      "derived": true
+    },
+    {
+      "name": "paco2",
+      "canonical_unit": "mmHg",
+      "derived": false
+    },
+    {
+      "name": "lactate",
+      "canonical_unit": "mmol/L",
+      "derived": false
+    },
+    {
+      "name": "creatinine",
+      "canonical_unit": "mg/dL",
+      "derived": false
+    },
+    {
+      "name": "bun",
+      "canonical_unit": "mg/dL",
+      "derived": false
+    },
+    {
+      "name": "bilirubin",
+      "canonical_unit": "mg/dL",
+      "derived": false
+    },
+    {
+      "name": "platelets",
+      "canonical_unit": "10^9/L",
+      "derived": false
+    },
+    {
+      "name": "wbc",
+      "canonical_unit": "10^9/L",
+      "derived": false
+    },
+    {
+      "name": "hemoglobin",
+      "canonical_unit": "g/dL",
+      "derived": false
+    },
+    {
+      "name": "ph",
+      "canonical_unit": "1",
+      "derived": false
+    },
+    {
+      "name": "pt",
+      "canonical_unit": "s",
+      "derived": false
+    },
+    {
+      "name": "aptt",
+      "canonical_unit": "s",
+      "derived": false
+    },
+    {
+      "name": "albumin",
+      "canonical_unit": "g/dL",
+      "derived": false
+    },
+    {
+      "name": "potassium",
+      "canonical_unit": "mmol/L",
+      "derived": false
+    },
+    {
+      "name": "sodium",
+      "canonical_unit": "mmol/L",
+      "derived": false
+    },
+    {
+      "name": "glucose",
+      "canonical_unit": "mg/dL",
+      "derived": false
+    },
+    {
+      "name": "chloride",
+      "canonical_unit": "mmol/L",
+      "derived": false
+    },
+    {
+      "name": "urine_output",
+      "canonical_unit": "mL",
+      "derived": false
+    },
+    {
+      "name": "neq",
+      "canonical_unit": "mcg/kg/min",
+      "derived": true
+    },
+    {
+      "name": "vent",
+      "canonical_unit": "1",
+      "derived": true
+    },
+    {
+      "name": "anion_gap",
+      "canonical_unit": "mmol/L",
+      "derived": false
+    },
+    {
+      "name": "bicarbonate",
+      "canonical_unit": "mmol/L",
+      "derived": false
+    },
+    {
+      "name": "calcium_total",
+      "canonical_unit": "mg/dL",
+      "derived": false
+    },
+    {
+      "name": "hematocrit",
+      "canonical_unit": "%",
+      "derived": false
+    },
+    {
+      "name": "magnesium",
+      "canonical_unit": "mg/dL",
+      "derived": false
+    },
+    {
+      "name": "phosphate",
+      "canonical_unit": "mg/dL",
+      "derived": false
+    },
+    {
+      "name": "inr",
+      "canonical_unit": "1",
+      "derived": false
+    },
+    {
+      "name": "lymphocytes_pct",
+      "canonical_unit": "%",
+      "derived": false
+    },
+    {
+      "name": "monocytes_pct",
+      "canonical_unit": "%",
+      "derived": false
+    },
+    {
+      "name": "neutrophils_pct",
+      "canonical_unit": "%",
+      "derived": false
+    },
+    {
+      "name": "basophils_pct",
+      "canonical_unit": "%",
+      "derived": false
+    },
+    {
+      "name": "eosinophils_pct",
+      "canonical_unit": "%",
+      "derived": false
+    },
+    {
+      "name": "alt",
+      "canonical_unit": "U/L",
+      "derived": false
+    },
+    {
+      "name": "alp",
+      "canonical_unit": "U/L",
+      "derived": false
+    },
+    {
+      "name": "ast",
+      "canonical_unit": "U/L",
+      "derived": false
+    },
+    {
+      "name": "mch",
+      "canonical_unit": "pg",
+      "derived": false
+    },
+    {
+      "name": "mchc",
+      "canonical_unit": "g/dL",
+      "derived": false
+    },
+    {
+      "name": "mcv",
+      "canonical_unit": "fL",
+      "derived": false
+    },
+    {
+      "name": "rdw_cv",
+      "canonical_unit": "%",
+      "derived": false
+    },
+    {
+      "name": "rbc",
+      "canonical_unit": "10^12/L",
+      "derived": false
+    }
+  ],
+  "semantics": {
+    "calcium_total": "Total calcium; ionized calcium is a different concept",
+    "bilirubin": "Total bilirubin",
+    "bun": "Blood urea nitrogen, not urea",
+    "differential": "Relative leukocyte percentages, not absolute counts",
+    "rdw_cv": "Coefficient of variation, not RDW-SD",
+    "pao2_paco2": "Arterial specimen confirmation required before using blood-gas values as arterial partial pressures",
+    "bicarbonate": "Measured chemistry bicarbonate; calculated blood-gas bicarbonate is not merged",
+    "urine_output": "Recorded volume; hourly aggregation must retain coverage and account for irrigant",
+    "vent": "Derived support state; mode/PEEP records alone are not an invasive-ventilation flag"
+  },
+  "evidence_features": {
+    "specimen_type": null,
+    "peep": "cmH2O",
+    "ventilator_mode": null,
+    "ventilator_type": null,
+    "oxygen_device": null,
+    "vent_invasive": null,
+    "vent_noninvasive": null,
+    "urine_irrigant_in": "mL",
+    "urine_irrigant_out": "mL",
+    "norepinephrine": "mcg/kg/min",
+    "epinephrine": "mcg/kg/min",
+    "dopamine": "mcg/kg/min",
+    "dobutamine": "mcg/kg/min",
+    "vasopressin": "units/min",
+    "phenylephrine": "mcg/kg/min"
+  },
+  "scope": "Ordered cross-dataset feature concepts and canonical units. Source item IDs and extraction rules belong to each dataset adapter."
+}

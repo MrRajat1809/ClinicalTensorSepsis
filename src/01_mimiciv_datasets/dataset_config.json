@@ -1,0 +1,570 @@
+{
+  "dataset_version": "1.0.0",
+  "source_database": "MIMIC-IV",
+  "source_version": "3.1",
+  "tensor": {
+    "urine": "Use stage-05 same-time net urine evidence. A bin with any invalid urine time is withheld; no rows is missing, recorded zero is zero. Sum documented mL, not an inferred mL/hour rate.",
+    "vent": "Invasive-only indicator: 1 if any unconflicted positive-duration invasive support during the available hour; 0 only if explicit noninvasive/off-support evidence covers the entire available hour without unknown/conflicting gaps. Otherwise missing. Use stage-05 airway/mode definitions and freshness; mode alone never proves invasive ventilation.",
+    "missing_category_labels": [
+      "",
+      "UNKNOWN",
+      "UNABLE TO OBTAIN",
+      "PATIENT DECLINED TO ANSWER"
+    ],
+    "category_vocabularies": {
+      "gender": [
+        "F",
+        "M"
+      ],
+      "race": [
+        "AMERICAN INDIAN/ALASKA NATIVE",
+        "ASIAN",
+        "ASIAN - ASIAN INDIAN",
+        "ASIAN - CHINESE",
+        "ASIAN - KOREAN",
+        "ASIAN - SOUTH EAST ASIAN",
+        "BLACK/AFRICAN",
+        "BLACK/AFRICAN AMERICAN",
+        "BLACK/CAPE VERDEAN",
+        "BLACK/CARIBBEAN ISLAND",
+        "HISPANIC OR LATINO",
+        "HISPANIC/LATINO - CENTRAL AMERICAN",
+        "HISPANIC/LATINO - COLUMBIAN",
+        "HISPANIC/LATINO - CUBAN",
+        "HISPANIC/LATINO - DOMINICAN",
+        "HISPANIC/LATINO - GUATEMALAN",
+        "HISPANIC/LATINO - HONDURAN",
+        "HISPANIC/LATINO - MEXICAN",
+        "HISPANIC/LATINO - PUERTO RICAN",
+        "HISPANIC/LATINO - SALVADORAN",
+        "MULTIPLE RACE/ETHNICITY",
+        "NATIVE HAWAIIAN OR OTHER PACIFIC ISLANDER",
+        "OTHER",
+        "PORTUGUESE",
+        "SOUTH AMERICAN",
+        "WHITE",
+        "WHITE - BRAZILIAN",
+        "WHITE - EASTERN EUROPEAN",
+        "WHITE - OTHER EUROPEAN",
+        "WHITE - RUSSIAN"
+      ],
+      "admission_type": [
+        "AMBULATORY OBSERVATION",
+        "DIRECT EMER.",
+        "DIRECT OBSERVATION",
+        "ELECTIVE",
+        "EU OBSERVATION",
+        "EW EMER.",
+        "OBSERVATION ADMIT",
+        "SURGICAL SAME DAY ADMISSION",
+        "URGENT"
+      ],
+      "first_careunit": [
+        "Cardiac Vascular Intensive Care Unit (CVICU)",
+        "Coronary Care Unit (CCU)",
+        "Intensive Care Unit (ICU)",
+        "Med/Surg",
+        "Medical Intensive Care Unit (MICU)",
+        "Medical/Surgical Intensive Care Unit (MICU/SICU)",
+        "Medicine",
+        "Medicine/Cardiology Intermediate",
+        "Neuro Intermediate",
+        "Neuro Stepdown",
+        "Neuro Surgical Intensive Care Unit (Neuro SICU)",
+        "PACU",
+        "Surgery/Trauma",
+        "Surgery/Vascular/Intermediate",
+        "Surgical Intensive Care Unit (SICU)",
+        "Trauma SICU (TSICU)"
+      ]
+    },
+    "references": [
+      "https://pubmed.ncbi.nlm.nih.gov/33220576/",
+      "https://github.com/MIT-LCP/mimic-code/blob/303d26c623dcc9c49cc0f204468d4acc2f063797/mimic-iv/concepts/medication/norepinephrine_equivalent_dose.sql"
+    ]
+  },
+  "imputation": {
+    "schema_version": "1.0.0",
+    "required_pypots_version": "1.5",
+    "seed": 42,
+    "split": {
+      "train_fraction": 0.7,
+      "validation_fraction": 0.15,
+      "method": "Sort SHA-256(seed:subject_id), then take fixed-size train/validation/test partitions; independent of labels and row order."
+    },
+    "holdout_fraction": 0.2,
+    "minimum_training_observations": 50,
+    "log1p_features": [
+      "alp",
+      "alt",
+      "ast",
+      "basophils_pct",
+      "bilirubin",
+      "bun",
+      "creatinine",
+      "eosinophils_pct",
+      "lactate",
+      "monocytes_pct",
+      "wbc"
+    ],
+    "model": {
+      "n_layers": 2,
+      "d_model": 256,
+      "d_ffn": 128,
+      "n_heads": 4,
+      "d_k": 64,
+      "d_v": 64,
+      "dropout": 0.1,
+      "attn_dropout": 0,
+      "diagonal_attention_mask": true,
+      "ORT_weight": 1,
+      "MIT_weight": 2
+    },
+    "defaults": {
+      "epochs": 60,
+      "patience": 8,
+      "batch_size": 64
+    },
+    "semantics": [
+      "Retrospective bidirectional SAITS with validation-selected baselines; use the saved patient partitions downstream.",
+      "Training-only transforms and weights; disjoint early-stopping and method-selection validation patients; no test-based tuning.",
+      "Observed values are unchanged. Structural follow-up, observed-only channels and patients without continuous context remain missing.",
+      "Out-of-bounds SAITS predictions use the selected baseline; method codes and rejection masks record every fill.",
+      "Artificial holdouts do not reveal accuracy at naturally missing cells or establish clinical validity.",
+      "SAITS has no dedicated structural attention-padding mask; structural cells have zero observed/target masks."
+    ],
+    "references": [
+      "https://github.com/WenjieDu/PyPOTS/blob/v1.5/pypots/imputation/saits/model.py",
+      "https://github.com/WenjieDu/PyPOTS/blob/v1.5/pypots/imputation/saits/data.py"
+    ],
+    "minimum_training_patients": 25,
+    "final_recipe": {
+      "rules": {
+        "minimum_targets": 25,
+        "minimum_target_patients": 10,
+        "maximum_saits_projection_fraction": 0.05,
+        "maximum_scenario_regret": 0.05,
+        "minimum_mean_improvement": 0.01,
+        "whole_channel_patients_per_feature": 128,
+        "stopping_patients_per_scenario": 512,
+        "stopping_channel_patients_per_feature": 16
+      },
+      "training_mask_mixture": {
+        "point": 0.3333333333333333,
+        "block6h": 0.3333333333333333,
+        "whole_channel": 0.3333333333333333
+      },
+      "whole_channel_training_sampling": "Inverse square root of training-patient feature coverage",
+      "training_loss": "Mean of per-feature masked Huber losses, delta=1 in train-standardized space",
+      "validation_metric": "Mean of per-feature masked MAE in train-standardized space",
+      "validation_subsets": "First half of hash-ordered validation: early stopping; second half: method selection",
+      "method_selection": "Best baseline by equal-scenario normalized MAE; accept SAITS only with adequate coverage, low projection, <=5% regret against BOTH baselines in every scenario and >=1% mean gain against the selected baseline",
+      "insufficient_validation": "Training median; explicitly marked insufficient evidence",
+      "test": "All three fixed scenarios scored only after checkpoint and feature methods are locked; never used for selection",
+      "fallback": "Forward fill uses only earlier observed values; training median before the first measurement or if the channel is entirely missing",
+      "natural_projection": "Out-of-bounds SAITS cells use the preselected baseline, with per-cell fallback reason; no clipped SAITS fills"
+    }
+  },
+  "shared_schema_version": "1.0.0",
+  "source_mapping": {
+    "mimiciv_version": "3.1",
+    "mimiciv_sources": {
+      "chartevents": {
+        "hr": [
+          220045
+        ],
+        "map": [
+          220181,
+          220052
+        ],
+        "rr": [
+          220210
+        ],
+        "temp_c": [
+          223761,
+          223762
+        ],
+        "spo2": [
+          220277
+        ],
+        "gcs_eye": [
+          220739
+        ],
+        "gcs_verbal": [
+          223900
+        ],
+        "gcs_motor": [
+          223901
+        ],
+        "fio2": [
+          223835
+        ],
+        "peep": [
+          220339,
+          224700
+        ],
+        "ventilator_mode": [
+          223849,
+          229314
+        ],
+        "ventilator_type": [
+          223848
+        ],
+        "oxygen_device": [
+          226732
+        ]
+      },
+      "labevents": {
+        "pao2": [
+          50821
+        ],
+        "paco2": [
+          50818
+        ],
+        "fio2": [
+          50816
+        ],
+        "ph": [
+          50820
+        ],
+        "lactate": [
+          50813
+        ],
+        "creatinine": [
+          50912
+        ],
+        "bun": [
+          51006
+        ],
+        "bilirubin": [
+          50885
+        ],
+        "platelets": [
+          51265
+        ],
+        "wbc": [
+          51301,
+          51300,
+          51755
+        ],
+        "hemoglobin": [
+          51222,
+          50811
+        ],
+        "pt": [
+          51274
+        ],
+        "aptt": [
+          51275
+        ],
+        "albumin": [
+          50862
+        ],
+        "potassium": [
+          50971,
+          50822
+        ],
+        "sodium": [
+          50983,
+          50824
+        ],
+        "glucose": [
+          50931,
+          50809
+        ],
+        "chloride": [
+          50902,
+          50806
+        ],
+        "anion_gap": [
+          50868,
+          52500
+        ],
+        "bicarbonate": [
+          50882
+        ],
+        "calcium_total": [
+          50893
+        ],
+        "hematocrit": [
+          51221,
+          50810,
+          51638,
+          51639,
+          52028
+        ],
+        "magnesium": [
+          50960
+        ],
+        "phosphate": [
+          50970
+        ],
+        "inr": [
+          51237,
+          51675
+        ],
+        "lymphocytes_pct": [
+          51244,
+          51245,
+          53188
+        ],
+        "monocytes_pct": [
+          51254
+        ],
+        "neutrophils_pct": [
+          51256,
+          53164
+        ],
+        "basophils_pct": [
+          51146
+        ],
+        "eosinophils_pct": [
+          51200
+        ],
+        "alt": [
+          50861,
+          53084
+        ],
+        "alp": [
+          50863,
+          53086
+        ],
+        "ast": [
+          50878,
+          53088
+        ],
+        "mch": [
+          51248,
+          53186
+        ],
+        "mchc": [
+          51249,
+          53185
+        ],
+        "mcv": [
+          51250,
+          51691
+        ],
+        "rdw_cv": [
+          51277,
+          53165
+        ],
+        "rbc": [
+          51279
+        ],
+        "specimen_type": [
+          52033
+        ]
+      },
+      "inputevents": {
+        "norepinephrine": [
+          221906
+        ],
+        "epinephrine": [
+          221289
+        ],
+        "dopamine": [
+          221662
+        ],
+        "dobutamine": [
+          221653
+        ],
+        "vasopressin": [
+          222315
+        ],
+        "phenylephrine": [
+          221749
+        ]
+      },
+      "outputevents": {
+        "urine_output": [
+          226559,
+          226560,
+          226561,
+          226584,
+          226563,
+          226564,
+          226565,
+          226567,
+          226557,
+          226558
+        ],
+        "urine_irrigant_in": [
+          227488
+        ],
+        "urine_irrigant_out": [
+          227489
+        ]
+      },
+      "procedureevents": {
+        "vent_invasive": [
+          225792
+        ],
+        "vent_noninvasive": [
+          225794
+        ]
+      }
+    },
+    "references": [
+      "https://github.com/MIT-LCP/mimic-code/blob/main/mimic-iv/concepts/measurement/blood_differential.sql",
+      "https://github.com/MIT-LCP/mimic-code/blob/main/mimic-iv/concepts/measurement/urine_output.sql",
+      "https://github.com/MIT-LCP/mimic-code/blob/main/mimic-iv/concepts/measurement/ventilator_setting.sql"
+    ]
+  },
+  "measurement_source_exceptions": {
+    "fio2": "MIMIC-IV items 223835/50816: blank or percent units can encode 0.2-1 fractions or 20-100 percentages. Values between 1 and 20 are ambiguous and rejected. Explicit fraction units never use percentage scaling.",
+    "intrinsic_units": "Blank units allowed only for mapped GCS components, INR and pH.",
+    "mchc": "MIMIC-IV lab item 51249 uses both % and g/dL; historical % is interpreted numerically as g/dL, with an explicit exception flag. Not a general percent-to-mass conversion.",
+    "rbc": "MIMIC-IV lab item 51279 m/uL means million/uL, numerically equal to 10^12/L.",
+    "norepinephrine": "Item 221906 mg/kg/min with patient weight 1 has known unit ambiguity; quarantine rather than guessing a correction."
+  },
+  "measurement_source_references": [
+    "https://github.com/MIT-LCP/mimic-code/blob/main/mimic-iv/concepts/measurement/bg.sql",
+    "https://github.com/MIT-LCP/mimic-code/blob/main/mimic-iv/concepts/measurement/gcs.sql",
+    "https://github.com/MIT-LCP/mimic-code/blob/main/mimic-iv/concepts/measurement/complete_blood_count.sql",
+    "https://github.com/MIT-LCP/mimic-code/blob/main/mimic-iv/concepts/medication/norepinephrine.sql"
+  ],
+  "infection_policy": {
+    "schema_version": "1.0.0",
+    "definition": "IV antibacterial/antifungal prescription plus diagnostic bacterial/fungal culture; negative cultures eligible; administration not verified",
+    "culture_mapping_version": "1.0.0",
+    "normalization": "Uppercase, trim and collapse whitespace; exact test-name matching",
+    "diagnostic_culture_test_names": [
+      "BLOOD CULTURE, ROUTINE",
+      "BLOOD CULTURE",
+      "BLOOD/FUNGAL CULTURE",
+      "BLOOD CULTURE, MYCO/F LYTIC",
+      "MYCO/F LYTIC BLOOD CULTURE",
+      "URINE CULTURE",
+      "RESPIRATORY CULTURE",
+      "WOUND CULTURE",
+      "ANAEROBIC CULTURE",
+      "AEROBIC CULTURE",
+      "FLUID CULTURE",
+      "TISSUE",
+      "TISSUE CULTURE",
+      "CSF CULTURE",
+      "CSF CULTURE & GRAM STAIN",
+      "FUNGAL CULTURE",
+      "FUNGAL CULTURE (HAIR/SKIN/NAILS)",
+      "FUNGAL CULTURE (OTHER)",
+      "FUNGAL CULTURE (BLOOD)",
+      "STOOL CULTURE",
+      "THROAT CULTURE",
+      "THROAT CULTURE, BETA STREP",
+      "CATHETER TIP CULTURE",
+      "QUANTITATIVE CULTURE",
+      "LEGIONELLA CULTURE",
+      "AFB CULTURE",
+      "MYCOBACTERIA CULTURE",
+      "NOCARDIA CULTURE"
+    ],
+    "excluded_specimen_names": [
+      "MRSA SCREEN",
+      "STAPH AUREUS SWAB"
+    ],
+    "excluded_test_pattern": "SCREEN|SURVEILL|COLONIZ|ANTIBODY|SEROLOG|ANTIGEN|PCR|CYTOGEN|GRAM STAIN|ACID FAST SMEAR",
+    "unknown_test": "Exclude and enumerate in the test audit; never infer diagnostic culture from specimen alone",
+    "cancelled_test": "Exclude tests whose only result rows are marked CANCELLED/CANCELED; retain a diagnostic test if a noncancelled row exists",
+    "scope": "A fixed culture-based research definition. Surveillance, serology and non-culture assays do not establish membership. A diagnostic culture name on a mixed specimen can qualify independently."
+  },
+  "sofa_policy": {
+    "schema_version": "1.1.0",
+    "definition": "MIMIC-IV research Sepsis-3 operationalization; reference-informed, not a bit-for-bit MIMIC derived-table reproduction or clinical adjudication.",
+    "baseline": "Primary baseline SOFA is explicitly assumed zero. Retrospective CCI flags cannot establish pre-infection SOFA. Measured pre-SIT versus post-SIT peak SOFA is a separate sensitivity analysis.",
+    "association_hours": [
+      -48,
+      24
+    ],
+    "rolling_hours": 24,
+    "fio2_lookback_hours": 4,
+    "support_lookback_hours": 4,
+    "minimum_vasoactive_duration_minutes": 60,
+    "urine_minimum_span_hours": 22,
+    "urine_maximum_gap_hours": 2,
+    "urine_boundary_tolerance_hours": 1,
+    "onset": "max(selected suspected infection time, first qualifying SOFA assessment time). SOFA time is an assessment timestamp, not the first one-point abnormality. Date-only onset has a separate upper bound.",
+    "candidate_selection": "Earliest ranked candidate with a qualifying in-ICU assessment. Date-only candidates must qualify inside the intersection of all possible SIT association windows; union-only cases are sensitivity results.",
+    "infection_timing": "Require stage-02 schema 2.1.0 and diagnostic culture test evidence. Primary inclusion requires definite antibiotic pairing and definite presentation-window eligibility. Possible-only timing remains in candidate/stay audits as infection_timing_uncertain, not primary sepsis. Possible SOFA evidence uses the presentation-conditioned eligible SIT union with explicit exclusive endpoints.",
+    "exclusive_endpoints": "Exclude the open upper endpoint of the possible SOFA association union. The robust intersection remains closed at its supremum-derived lower bound. Preserve onset upper-end exclusivity unless max(SIT,SOFA time) collapses it to an attained point; follow-up checks use the conservative upper bound.",
+    "missingness": "Keep nullable components and observed-component count. Missing components contribute zero only to the operational total; no observed evidence is not a measured SOFA of zero.",
+    "respiratory_support": "Primary high respiratory SOFA requires invasive procedure evidence or a recent airway AND active ventilation mode, without conflicting recent support evidence. NIV is retained separately, not invasive. No mode-only/PEEP inference.",
+    "gcs": "Only complete, nonconflicting same-timestamp components; no cross-time minima, normal filling or ETT verbal scoring. Sedation is not adjudicated.",
+    "urine": "Recorded volumes, not assumed hourly rates. Sum positive/zero observations in (t-24h,t]; require full ICU lookback, >=22h timestamp span, <=2h internal gaps and <=1h boundary gaps, with no invalid measurements. Coverage is a documentation proxy, not proof of complete collection. Irrigant subtraction only for same-time paired input/output without concurrent ordinary urine; otherwise withhold urine scoring.",
+    "active_ventilator_modes": [
+      "(s) cmv",
+      "aprv",
+      "aprv/biphasic+apnpress",
+      "aprv/biphasic+apnvol",
+      "apv (cmv)",
+      "apv (simv)",
+      "apnea ventilation",
+      "asv",
+      "cmv",
+      "cmv/assist",
+      "cmv/assist/autoflow",
+      "cmv/autoflow",
+      "cpap",
+      "cpap/pps",
+      "cpap/psv",
+      "cpap/psv+apn tcpl",
+      "cpap/psv+apnpres",
+      "cpap/psv+apnvol",
+      "mmv",
+      "mmv/autoflow",
+      "mmv/psv",
+      "mmv/psv/autoflow",
+      "p-cmv",
+      "p-simv",
+      "pcv+",
+      "pcv+/psv",
+      "pcv+assist",
+      "pres/ac",
+      "prvc/ac",
+      "prvc/simv",
+      "psv/sbt",
+      "simv",
+      "simv/autoflow",
+      "simv/pres",
+      "simv/psv",
+      "simv/psv/autoflow",
+      "simv/vol",
+      "spont",
+      "synchron master",
+      "synchron slave",
+      "vol/ac",
+      "vs"
+    ],
+    "noninvasive_modes": [
+      "niv",
+      "niv-st",
+      "duopap"
+    ],
+    "noninvasive_devices": [
+      "bipap mask",
+      "cpap mask"
+    ],
+    "nonventilated_devices": [
+      "nasal cannula",
+      "none",
+      "face tent",
+      "aerosol-cool",
+      "high flow nasal cannula",
+      "non-rebreather",
+      "high flow neb",
+      "oxymizer",
+      "venti mask",
+      "medium conc mask",
+      "trach mask",
+      "t-piece",
+      "ultrasonic neb",
+      "vapomist"
+    ],
+    "reference_commit": "303d26c623dcc9c49cc0f204468d4acc2f063797",
+    "references": [
+      "https://github.com/MIT-LCP/mimic-code/blob/303d26c623dcc9c49cc0f204468d4acc2f063797/mimic-iv/concepts/score/sofa.sql",
+      "https://github.com/MIT-LCP/mimic-code/blob/303d26c623dcc9c49cc0f204468d4acc2f063797/mimic-iv/concepts/sepsis/sepsis3.sql",
+      "https://jamanetwork.com/journals/jama/fullarticle/2492881"
+    ]
+  }
+}

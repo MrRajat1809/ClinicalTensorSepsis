@@ -1,0 +1,36 @@
+{
+  "version": "1.0.0",
+  "presentation_version": "relationships-50",
+  "dpi": 300,
+  "font_family": "DejaVu Sans",
+  "font_size": 9,
+  "datasets": ["mimiciv", "mimic3-carevue", "eicu"],
+  "dataset_labels": {"mimiciv": "MIMIC-IV", "mimic3-carevue": "CareVue", "eicu": "eICU"},
+  "dataset_colors": {"mimiciv": "#4A6FE3", "mimic3-carevue": "#DB4325", "eicu": "#55A868"},
+  "dataset_markers": {"mimiciv": "o", "mimic3-carevue": "s", "eicu": "^"},
+  "method_colors": {"observed": "#4A6FE3", "saits": "#B9A0CD", "forward_fill": "#F1B495", "median": "#F3D266", "unfilled": "#E0E0E0"},
+  "clinical_features": ["hr", "map", "rr", "lactate", "creatinine", "platelets", "bilirubin", "fio2"],
+  "log_features": ["lactate", "creatinine", "bilirubin"],
+  "imputation_scenarios": ["point", "block6h", "whole_channel"],
+  "comparators": ["median", "forward_fill"],
+  "density_grid": 100,
+  "density_sigma_bins": 1.5,
+  "reference_contour_masses": [0.5, 0.8, 0.95],
+  "clinical_network": {
+    "minimum_pair_patients": 20,
+    "minimum_absolute_rho": 0.0,
+    "groups": [
+      {"label": "Circulation", "color": "#B77967", "features": ["hr", "map", "lactate", "neq"]},
+      {"label": "Respiration", "color": "#6C9EAE", "features": ["rr", "spo2", "pao2", "fio2", "pf_ratio", "paco2", "vent"]},
+      {"label": "Neurology / temperature", "color": "#AD9471", "features": ["gcs_eye", "gcs_verbal", "gcs_motor", "temp_c"]},
+      {"label": "Renal / metabolic", "color": "#AAA36C", "features": ["creatinine", "bun", "urine_output", "sodium", "potassium", "chloride", "bicarbonate", "anion_gap", "ph", "glucose", "calcium_total", "magnesium", "phosphate"]},
+      {"label": "Liver / protein", "color": "#A58BA9", "features": ["bilirubin", "alt", "ast", "alp", "albumin"]},
+      {"label": "Blood counts", "color": "#79A38D", "features": ["platelets", "wbc", "hemoglobin", "hematocrit", "rbc", "mch", "mchc", "mcv", "rdw_cv"]},
+      {"label": "Differential", "color": "#7995B1", "features": ["lymphocytes_pct", "monocytes_pct", "neutrophils_pct", "basophils_pct", "eosinophils_pct"]},
+      {"label": "Coagulation", "color": "#AB8291", "features": ["pt", "aptt", "inr"]}
+    ]
+  },
+  "interpretation": "Descriptive rendering of frozen v1.0.0 data and post-hoc analyses. No fitting, method selection, statistical retesting or biological-equivalence claim. Captions belong outside the figures.",
+  "intervals": "Use saved pointwise 95% intervals. Quartiles and density widths describe distributions, not confidence intervals.",
+  "output_policy": "Assembled Fig1-Fig7 and SuppFig3, SuppFig4, SuppFig6 and SuppFig7 in the output root; all standalone main and supplementary panels in panels/. PDF plus 300 dpi PNG; shared summary CSV, manifest and QC in the output root."
+}

@@ -1,0 +1,21 @@
+# Direct pipeline dependencies, pinned to the reported working environment.
+numpy==1.26.4
+scipy==1.13.1
+pandas==2.2.2
+pyarrow==16.1.0
+duckdb==1.1.3
+scikit-learn==1.5.2
+joblib==1.4.2
+threadpoolctl==3.6.0
+torch==2.2.1
+pypots==1.5
+POT==0.9.4
+matplotlib==3.9.2
+Pillow==10.2.0
+
+# Notebook interface and packages supplied by the PyTorch base image.
+jupyterlab==4.2.5
+ipykernel==7.3.0
+ipywidgets==8.1.5
+torchvision==0.17.1
+torchaudio==2.2.1

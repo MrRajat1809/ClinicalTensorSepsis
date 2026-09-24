@@ -1,0 +1,22 @@
+services:
+  sepsis_clinical:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: sepsis_clinical_env:1.0.0
+    init: true
+    working_dir: /workspace
+    ports:
+      - "127.0.0.1:8888:8888"
+    volumes:
+      - ..:/workspace
+    environment:
+      - JUPYTER_TOKEN
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    shm_size: "8gb"

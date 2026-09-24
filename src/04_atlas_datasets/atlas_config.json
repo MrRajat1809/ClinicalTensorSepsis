@@ -1,0 +1,131 @@
+{
+  "version": "1.0.0",
+  "seed": 20260916,
+  "reference": "mimiciv",
+  "datasets": {
+    "mimiciv": "src/01_mimiciv_datasets",
+    "mimic3-carevue": "src/02_mimic3_datasets",
+    "eicu": "src/03_eicu_datasets"
+  },
+  "eligibility": {
+    "minimum_training_patients": 40,
+    "minimum_training_prevalence": 0.05,
+    "minimum_shared_features": 12,
+    "minimum_patient_observed_cells": 12,
+    "minimum_patient_observed_features": 3
+  },
+  "representation": {
+    "hidden_channels": 16,
+    "pool_blocks": 4,
+    "epochs": 40,
+    "patience": 6,
+    "batch_size": 128,
+    "learning_rate": 0.001,
+    "weight_decay": 0.0001,
+    "mask_fraction": 0.25,
+    "consistency_weight": 0.05,
+    "method_weights": [
+      0.0,
+      1.0,
+      0.5,
+      0.35,
+      0.2
+    ],
+    "log1p_features": [
+      "lactate",
+      "creatinine",
+      "bun",
+      "bilirubin",
+      "wbc",
+      "alt",
+      "ast",
+      "alp",
+      "pt",
+      "aptt",
+      "inr"
+    ],
+    "anchor_features": [
+      "hr",
+      "map",
+      "creatinine",
+      "lactate",
+      "platelets",
+      "fio2"
+    ],
+    "probe_features": [
+      "hr",
+      "map",
+      "rr",
+      "creatinine",
+      "lactate",
+      "platelets",
+      "bilirubin",
+      "fio2"
+    ],
+    "probe_ridge": 10.0
+  },
+  "transport": {
+    "maximum_prototypes": 1024,
+    "entropy": [
+      0.05,
+      0.2
+    ],
+    "mass_regularization": 1.0,
+    "strengths": [
+      0.25,
+      0.5
+    ],
+    "anchor_cost_weight": 1.0,
+    "minimum_shared_anchors": 2,
+    "maximum_anchor_rms": 3.0,
+    "minimum_mass_ratio": 0.25,
+    "maximum_forbidden_mass_fraction": 1e-06,
+    "ridge": 100.0,
+    "maximum_correction_rms": 0.35,
+    "support_quantile": 0.99,
+    "solver_iterations": 3000,
+    "solver_tolerance": 1e-07,
+    "covariance_strength": 0.25
+  },
+  "selection": {
+    "minimum_validation_patients": 30,
+    "minimum_probe_patients": 20,
+    "minimum_probe_dimensions": 4,
+    "minimum_supported_fraction": 0.2,
+    "minimum_stability_improvement": 0.02,
+    "maximum_probe_error_ratio": 1.05,
+    "probe_error_slack": 0.02,
+    "minimum_slope_sign_agreement": 0.95,
+    "minimum_pair_distance_ratio": 0.85,
+    "maximum_pair_distance_ratio": 1.15,
+    "minimum_tail_patients": 10,
+    "pair_samples": 2000
+  },
+  "atlas": {
+    "clusters": 8,
+    "plot_features": [
+      "hr",
+      "map",
+      "rr",
+      "lactate",
+      "creatinine",
+      "platelets"
+    ]
+  },
+  "protocol": {
+    "scope": "Retrospective 24-hour trajectory atlas with locked preservation diagnostics; no mortality-prediction modelling.",
+    "selection": "Unlabelled target validation only. Outcome labels are not used to fit or select transport. Test results never change choices.",
+    "imputation": "Existing independently trained, training-only SAITS recipes are retained. This is adaptation with access to target training data, not zero-shot transfer. Method weights are conservative design choices, not calibrated uncertainty.",
+    "clinical": "OT cannot identify technical versus biological variation from these data alone. Preservation probes and support gates are empirical safeguards, not proof of biological invariance.",
+    "missingness": "Hourly point/block removal measures sensitivity to lost hourly evidence; it does not simulate changes in raw-event density and hourly extrema. Missingness can encode illness and treatment.",
+    "eicu": "Main documented-infection proxy and its timing remain unchanged. Strict culture flags describe a sensitivity subgroup; existing tensors remain anchored to the main proxy onset.",
+    "identity": "Patient splits are inherited within databases. No reliable cross-version person linkage is available for MIMIC-III versus MIMIC-IV; cross-database person independence is not established. eICU patient holdout does not establish unseen-hospital generalization.",
+    "coverage": "All clinical patients remain in metadata. Patients without sufficient observed shared cells/features have unavailable representations; unsupported eligible targets retain original embeddings. No cohort rows are deleted.",
+    "acceptance": "Validation gates choose identity when correction is unsupported or fails preservation/stability criteria. Test results never switch the choice. QC PASS establishes implementation and provenance, not a claim that OT improves outcomes."
+  },
+  "references": [
+    "https://proceedings.mlr.press/v139/fatras21a.html",
+    "https://proceedings.mlr.press/v206/zhou23b.html",
+    "https://pythonot.github.io/gen_modules/ot.unbalanced.html"
+  ]
+}

@@ -1,0 +1,564 @@
+{
+  "schema_version": "1.0.0",
+  "rules_revision": "1.0.0",
+  "scope": "Adult measurement QC after canonical-unit conversion; project screening limits, not normal ranges or validated physiological impossibility thresholds.",
+  "bounds_policy": "Inclusive project screening limits; retain raw and converted values and quarantine out-of-range values. No clipping or inferred correction of observations. Revised upper limits are conservative engineering exclusions for extreme electrolyte and drug records, not universal clinical impossibility thresholds.",
+  "revised_upper_limits": {
+    "potassium": 10,
+    "magnesium": 15,
+    "calcium_total": 20,
+    "norepinephrine": 10,
+    "epinephrine": 10,
+    "phenylephrine": 10,
+    "dopamine": 100,
+    "dobutamine": 100,
+    "vasopressin": 1
+  },
+  "weight_kg_bounds": [
+    20,
+    400
+  ],
+  "bounds": {
+    "hr": [
+      0,
+      300
+    ],
+    "map": [
+      0,
+      300
+    ],
+    "rr": [
+      0,
+      100
+    ],
+    "temp_c": [
+      20,
+      45
+    ],
+    "spo2": [
+      0,
+      100
+    ],
+    "gcs_eye": [
+      1,
+      4
+    ],
+    "gcs_verbal": [
+      1,
+      5
+    ],
+    "gcs_motor": [
+      1,
+      6
+    ],
+    "pao2": [
+      1,
+      800
+    ],
+    "fio2": [
+      0.2,
+      1
+    ],
+    "paco2": [
+      1,
+      300
+    ],
+    "lactate": [
+      0,
+      50
+    ],
+    "creatinine": [
+      0,
+      50
+    ],
+    "bun": [
+      0,
+      400
+    ],
+    "bilirubin": [
+      0,
+      100
+    ],
+    "platelets": [
+      0,
+      3000
+    ],
+    "wbc": [
+      0,
+      1000
+    ],
+    "hemoglobin": [
+      0.1,
+      30
+    ],
+    "ph": [
+      6,
+      8.2
+    ],
+    "pt": [
+      0,
+      300
+    ],
+    "aptt": [
+      0,
+      500
+    ],
+    "albumin": [
+      0,
+      15
+    ],
+    "potassium": [
+      0.5,
+      10
+    ],
+    "sodium": [
+      50,
+      220
+    ],
+    "glucose": [
+      1,
+      5000
+    ],
+    "chloride": [
+      20,
+      200
+    ],
+    "urine_output": [
+      0,
+      10000
+    ],
+    "anion_gap": [
+      -30,
+      100
+    ],
+    "bicarbonate": [
+      0,
+      80
+    ],
+    "calcium_total": [
+      0,
+      20
+    ],
+    "hematocrit": [
+      1,
+      85
+    ],
+    "magnesium": [
+      0,
+      15
+    ],
+    "phosphate": [
+      0,
+      50
+    ],
+    "inr": [
+      0.5,
+      30
+    ],
+    "lymphocytes_pct": [
+      0,
+      100
+    ],
+    "monocytes_pct": [
+      0,
+      100
+    ],
+    "neutrophils_pct": [
+      0,
+      100
+    ],
+    "basophils_pct": [
+      0,
+      100
+    ],
+    "eosinophils_pct": [
+      0,
+      100
+    ],
+    "alt": [
+      0,
+      100000
+    ],
+    "alp": [
+      0,
+      30000
+    ],
+    "ast": [
+      0,
+      100000
+    ],
+    "mch": [
+      1,
+      100
+    ],
+    "mchc": [
+      5,
+      60
+    ],
+    "mcv": [
+      30,
+      200
+    ],
+    "rdw_cv": [
+      5,
+      60
+    ],
+    "rbc": [
+      0,
+      15
+    ],
+    "peep": [
+      0,
+      100
+    ],
+    "urine_irrigant_in": [
+      0,
+      100000
+    ],
+    "urine_irrigant_out": [
+      0,
+      100000
+    ],
+    "norepinephrine": [
+      0,
+      10
+    ],
+    "epinephrine": [
+      0,
+      10
+    ],
+    "dopamine": [
+      0,
+      100
+    ],
+    "dobutamine": [
+      0,
+      100
+    ],
+    "phenylephrine": [
+      0,
+      10
+    ],
+    "vasopressin": [
+      0,
+      1
+    ]
+  },
+  "unit_aliases": {
+    "1": [
+      "1",
+      "units"
+    ],
+    "beats/min": [
+      "bpm",
+      "beats/min"
+    ],
+    "mmHg": [
+      "mmhg",
+      "mm hg"
+    ],
+    "breaths/min": [
+      "insp/min",
+      "breaths/min"
+    ],
+    "degC": [
+      "°c",
+      "degc",
+      "c",
+      "celsius"
+    ],
+    "%": [
+      "%",
+      "percent"
+    ],
+    "score": [
+      "score"
+    ],
+    "fraction": [
+      "fraction"
+    ],
+    "mmol/L": [
+      "mmol/l"
+    ],
+    "mg/dL": [
+      "mg/dl"
+    ],
+    "10^9/L": [
+      "10^9/l",
+      "k/ul"
+    ],
+    "g/dL": [
+      "g/dl"
+    ],
+    "s": [
+      "s",
+      "sec",
+      "second",
+      "seconds"
+    ],
+    "mL": [
+      "ml"
+    ],
+    "U/L": [
+      "u/l",
+      "iu/l"
+    ],
+    "pg": [
+      "pg"
+    ],
+    "fL": [
+      "fl"
+    ],
+    "10^12/L": [
+      "10^12/l"
+    ],
+    "cmH2O": [
+      "cmh2o"
+    ],
+    "mcg/kg/min": [
+      "mcg/kg/min"
+    ],
+    "units/min": [
+      "units/min",
+      "unit/min"
+    ]
+  },
+  "extra_conversions": [
+    {
+      "features": [
+        "temp_c"
+      ],
+      "units": [
+        "°f",
+        "degf",
+        "f",
+        "fahrenheit"
+      ],
+      "factor": 0.5555555555555556,
+      "offset": -17.77777777777778
+    },
+    {
+      "features": [
+        "pao2",
+        "paco2",
+        "map"
+      ],
+      "units": [
+        "kpa"
+      ],
+      "factor": 7.5006168270417
+    },
+    {
+      "features": [
+        "albumin",
+        "hemoglobin",
+        "mchc"
+      ],
+      "units": [
+        "g/l"
+      ],
+      "factor": 0.1
+    },
+    {
+      "features": [
+        "potassium",
+        "sodium",
+        "chloride",
+        "anion_gap",
+        "bicarbonate"
+      ],
+      "units": [
+        "meq/l"
+      ],
+      "factor": 1
+    },
+    {
+      "features": [
+        "wbc",
+        "platelets"
+      ],
+      "units": [
+        "#/ul",
+        "cells/ul"
+      ],
+      "factor": 0.001
+    },
+    {
+      "features": [
+        "rbc"
+      ],
+      "units": [
+        "#/ul",
+        "cells/ul"
+      ],
+      "factor": 1e-06
+    },
+    {
+      "features": [
+        "hematocrit",
+        "spo2",
+        "lymphocytes_pct",
+        "monocytes_pct",
+        "neutrophils_pct",
+        "basophils_pct",
+        "eosinophils_pct"
+      ],
+      "units": [
+        "fraction"
+      ],
+      "factor": 100
+    },
+    {
+      "features": [
+        "urine_output",
+        "urine_irrigant_in",
+        "urine_irrigant_out"
+      ],
+      "units": [
+        "l"
+      ],
+      "factor": 1000
+    },
+    {
+      "features": [
+        "creatinine"
+      ],
+      "units": [
+        "umol/l"
+      ],
+      "factor": 0.011312217194570135
+    },
+    {
+      "features": [
+        "creatinine"
+      ],
+      "units": [
+        "mmol/l"
+      ],
+      "factor": 11.312217194570135
+    },
+    {
+      "features": [
+        "glucose"
+      ],
+      "units": [
+        "mmol/l"
+      ],
+      "factor": 18.01477211313277
+    },
+    {
+      "features": [
+        "calcium_total"
+      ],
+      "units": [
+        "mmol/l"
+      ],
+      "factor": 4
+    },
+    {
+      "features": [
+        "norepinephrine",
+        "epinephrine",
+        "dopamine",
+        "dobutamine",
+        "phenylephrine"
+      ],
+      "units": [
+        "mg/kg/min"
+      ],
+      "factor": 1000
+    },
+    {
+      "features": [
+        "norepinephrine",
+        "epinephrine",
+        "dopamine",
+        "dobutamine",
+        "phenylephrine"
+      ],
+      "units": [
+        "mcg/kg/hour"
+      ],
+      "factor": 0.016666666666666666
+    },
+    {
+      "features": [
+        "norepinephrine",
+        "epinephrine",
+        "dopamine",
+        "dobutamine",
+        "phenylephrine"
+      ],
+      "units": [
+        "mcg/min"
+      ],
+      "factor": 1,
+      "weight_operation": "divide"
+    },
+    {
+      "features": [
+        "norepinephrine",
+        "epinephrine",
+        "dopamine",
+        "dobutamine",
+        "phenylephrine"
+      ],
+      "units": [
+        "mg/min"
+      ],
+      "factor": 1000,
+      "weight_operation": "divide"
+    },
+    {
+      "features": [
+        "norepinephrine",
+        "epinephrine",
+        "dopamine",
+        "dobutamine",
+        "phenylephrine"
+      ],
+      "units": [
+        "mcg/hour"
+      ],
+      "factor": 0.016666666666666666,
+      "weight_operation": "divide"
+    },
+    {
+      "features": [
+        "norepinephrine",
+        "epinephrine",
+        "dopamine",
+        "dobutamine",
+        "phenylephrine"
+      ],
+      "units": [
+        "mg/hour"
+      ],
+      "factor": 16.666666666666668,
+      "weight_operation": "divide"
+    },
+    {
+      "features": [
+        "vasopressin"
+      ],
+      "units": [
+        "units/hour",
+        "unit/hour"
+      ],
+      "factor": 0.016666666666666666
+    },
+    {
+      "features": [
+        "vasopressin"
+      ],
+      "units": [
+        "units/kg/min"
+      ],
+      "factor": 1,
+      "weight_operation": "multiply"
+    }
+  ],
+  "references": [
+    "https://backend.mayocliniclabs.com/order-tests/si-unit-conversion.html"
+  ]
+}
