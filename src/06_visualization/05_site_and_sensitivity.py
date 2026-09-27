@@ -262,6 +262,8 @@ def study_support(run, table, minimum_hours, title, canvas=None, show_y=True, ax
     ax.set_yticks([0, 0.25, 0.5, 0.75, 1])
     V.clean_axis(ax, grid='y', percent=True)
     ax.tick_params(labelsize=7, length=2.5, pad=3)
+    for side in ('left', 'bottom'):
+        ax.spines[side].set(color='#222222', linewidth=0.85)
     if show_x:
         ax.set_xlabel('Minimum number of features', fontsize=8, labelpad=5)
     if show_y:

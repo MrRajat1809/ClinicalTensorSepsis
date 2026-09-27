@@ -248,6 +248,7 @@ def assembled_coverage_supplement(run, hourly, provenance):
     for column, name in enumerate(names):
         renderers[f'supp_hourly_coverage_{name}'] = lambda c=column, n=name: hourly_coverage(
             run, hourly, n, canvas=fig.add_subfigure(grid[0, c]))
+    for column, name in enumerate(names):
         renderers[f'supp_cell_provenance_{name}'] = lambda c=column, n=name: cell_provenance(
             run, provenance, hourly, n, canvas=fig.add_subfigure(grid[1, c]))
     run.assemble(fig, 3, renderers, supplementary=True)

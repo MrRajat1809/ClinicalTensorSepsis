@@ -377,9 +377,14 @@ class Run:
             require(artifact_path(number, key) in self.outputs,
                 f'Export the standalone panel before assembly: {key}')
         try:
-            for key, render in renderers.items():
+            for index, (key, render) in enumerate(renderers.items()):
                 self._assembly_panel = (number, key)
                 render()
+                if supplementary:
+                    canvas = fig.subfigs[-1]
+                    heading = canvas._suptitle or canvas.axes[0]._left_title
+                    require(heading.get_text(), f'Missing supplementary panel title: {key}')
+                    heading.set_text(f'{chr(65 + index)}.  {heading.get_text()}')
         finally:
             self._assembly_panel = None
         assembly_name = 'supplement' if supplementary else None

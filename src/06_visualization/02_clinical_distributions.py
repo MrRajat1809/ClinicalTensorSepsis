@@ -14,8 +14,8 @@ def patient_means(values):
 def panel_card(fig, bounds):
     left, bottom, width, height = bounds
     figure_width, figure_height = fig.get_size_inches()
-    inset_left, inset_right = 0.58, 0.12
-    inset_bottom, inset_top = 0.52, 0.60
+    inset_left, inset_right = 0.50, 0.10
+    inset_bottom, inset_top = 0.46, 0.55
     plot_width = width - inset_left - inset_right
     plot_height = height - inset_bottom - inset_top
     ax = fig.add_axes([(left + inset_left) / figure_width, (bottom + inset_bottom) / figure_height,
@@ -57,13 +57,15 @@ def main():
     features = run.config['clinical_features']
     datasets = run.config['datasets']
     summaries = V.select(run.table('cohort_selection'), question='cohort_description', metric='patient_mean')
-    figure_width, figure_height = 23.2, 5.3
-    outer_margin, gutter = 0.16, 0.18
-    card_width = (figure_width - 2 * outer_margin - (len(features) - 1) * gutter) / len(features)
-    card_height = figure_height - 2 * outer_margin
+    V.require(len(features) == 8, 'Figure 2 expects eight clinical features')
+    figure_width, figure_height = 10.8, 7.8
+    outer_margin, gutter = 0.12, 0.18
+    card_width = (figure_width - 2 * outer_margin - 3 * gutter) / 4
+    card_height = (figure_height - 2 * outer_margin - gutter) / 2
     fig = plt.figure(figsize=(figure_width, figure_height), layout='none')
     fig.set_facecolor('white')
-    axes = [panel_card(fig, (outer_margin + i * (card_width + gutter), outer_margin, card_width, card_height))
+    axes = [panel_card(fig, (outer_margin + (i % 4) * (card_width + gutter),
+            outer_margin + (1 - i // 4) * (card_height + gutter), card_width, card_height))
         for i in range(len(features))]
     for i, (feature, ax) in enumerate(zip(features, axes)):
         panel_title(ax, chr(65 + i), V.label(feature))
@@ -86,7 +88,7 @@ def main():
             color = run.config['dataset_colors'][name]
             violin_summary(ax, display, color, run.config['dataset_markers'][name], domain)
             ax.text(domain, 0.966, f'n={len(values):,}', transform=ax.get_xaxis_transform(), ha='center', va='top',
-                fontsize=6.7, color=color)
+                fontsize=7.4, color=color)
             qs = [0, 0.1, 0.25, 0.5, 0.75, 0.9, 1]
             for q, value in zip(qs, np.quantile(values, qs)):
                 run.add(2, chr(65 + i), source=f'data/processed/{name}/tensor_observed.npy', dataset=name,
@@ -96,12 +98,12 @@ def main():
     for feature, ax in zip(features, axes):
         ax.set_xlim(-0.72, 2.72)
         ax.set_xticks(range(3), [run.config['dataset_labels'][n] for n in datasets])
-        ax.tick_params(axis='x', labelsize=7.2, length=0, pad=5)
-        ax.tick_params(axis='y', labelsize=7.1, length=2, width=0.6, pad=2, color='#999999')
+        ax.tick_params(axis='x', labelsize=8, length=0, pad=5)
+        ax.tick_params(axis='y', labelsize=7.8, length=2, width=0.7, pad=2, color='#222222')
         ylabel = run.units[feature]
         if feature in run.config['log_features']:
             ylabel += ' · log(1+x) spacing'
-        ax.set_ylabel(ylabel, fontsize=7.8, labelpad=2)
+        ax.set_ylabel(ylabel, fontsize=8.5, labelpad=2)
         ax.grid(axis='y', color='#E7E7E7', linestyle=':', linewidth=0.7, alpha=0.9)
         ax.set_axisbelow(True)
         ax.margins(y=0.17)
@@ -112,7 +114,7 @@ def main():
             ticks = ticks[np.log1p(ticks) <= upper]
             ax.set_yticks(np.log1p(ticks), [str(t) for t in ticks])
     run.audit.append(dict(check='clinical_distributions', features=len(features), independent_patient_means=True,
-            input='observed_only', matches_analysis=True, layout='1x8_publication_cards'))
+            input='observed_only', matches_analysis=True, layout='2x4_publication_cards'))
     run.save(fig, 2)
     run.finish()
 

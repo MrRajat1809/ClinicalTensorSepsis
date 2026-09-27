@@ -49,7 +49,7 @@ FEATURE_NAMES = dict(zip(
      'Mean corpuscular volume', 'Red cell distribution width, coefficient of variation',
      'Red blood cell count']))
 PATIENT_DOC = {
-    'patient_key': ('string', '<dataset>:<stay_id>, e.g. mimiciv:12345678 (format example); unique across sources. '
+    'patient_key': ('string', '"<dataset>:<stay_id>", e.g. "mimiciv:12345678" (format example); unique across sources. '
                     'Join patient/embedding tables on patient_key and hourly tables on patient_key plus hour.'),
     'dataset': ('string', 'Source dataset; source definitions are not interchangeable'),
     'tensor_row': ('integer', 'Zero-based row in this source tensor; repeats across datasets. '

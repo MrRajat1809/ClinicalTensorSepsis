@@ -8,6 +8,11 @@ import numpy as np
 from scipy.ndimage import gaussian_filter
 import visualization_common as V
 
+NETWORK_COLORS = {'Circulation': '#E64B35', 'Respiration': '#3288BD',
+    'Neurology / temperature': '#9B59B6', 'Renal / metabolic': '#F3B032',
+    'Liver / protein': '#E76BA3', 'Blood counts': '#4DBD74',
+    'Differential': '#20B7B0', 'Coagulation': '#6761C2'}
+
 
 def density_grid(points, bounds, bins, sigma):
     h, xe, ye = np.histogram2d(points[:, 0], points[:, 1], bins=bins, range=bounds)
@@ -95,6 +100,8 @@ def atlas_maps(run):
                 linewidths=0.65, rasterized=True, zorder=4)
             ax.set(xlim=bounds[0], ylim=bounds[1], aspect='equal', xlabel='', ylabel='')
             V.clean_axis(ax, grid=None)
+            for side in ('left', 'bottom'):
+                ax.spines[side].set(color='#222222', linewidth=0.9)
             ax.tick_params(axis='x', labelbottom=row == 1, labelsize=7.5)
             ax.tick_params(axis='y', labelleft=col == 0, labelsize=7.5)
             ax.text(0, 1.015, f'{panel}.', transform=ax.transAxes, ha='left', va='bottom', fontsize=9.2,
@@ -389,9 +396,10 @@ def clinical_relationships(run, name):
 
 def network_legend(fig, run, ncol=4, assembled=False):
     groups = run.config['clinical_network']['groups']
-    handles = [Line2D([], [], marker='o', ls='', color=g['color'], markersize=4, label=g['label']) for g in groups]
-    handles += [Line2D([], [], color='#356D89', lw=1.8, alpha=0.65, label='Positive ρ'),
-        Line2D([], [], color='#AE5965', lw=1.8, alpha=0.65, label='Negative ρ'), Line2D(
+    handles = [Line2D([], [], marker='o', ls='', color=NETWORK_COLORS[g['label']], markersize=4, label=g['label'])
+        for g in groups]
+    handles += [Line2D([], [], color='#4A6FE3', lw=2.1, alpha=0.85, label='Positive ρ'),
+        Line2D([], [], color='#DB4325', lw=2.1, alpha=0.85, label='Negative ρ'), Line2D(
             [], [], marker='o', ls='', color=V.MUTED, markerfacecolor='white', markersize=4, label='No displayed links'
         ), Line2D([], [], marker='s', ls='', color=V.MUTED, markersize=4, label='Derived feature')]
     fig.legend(handles=handles, loc='lower center' if assembled else 'outside lower center', ncol=ncol, fontsize=6.5,
@@ -421,12 +429,12 @@ def clinical_network(run, name, data, canvas=None, show_legend=True, ax=None):
     for group in settings['groups']:
         first = angle
         for feature in group['features']:
-            positions[feature] = 0.88 * np.array([np.cos(angle), np.sin(angle)])
+            positions[feature] = 0.95 * np.array([np.cos(angle), np.sin(angle)])
             theta_by_feature[feature] = angle
-            node_colors[feature] = group['color']
+            node_colors[feature] = NETWORK_COLORS[group['label']]
             angle -= step
-        ax.add_patch(Arc((0, 0), 1.9, 1.9, theta1=np.rad2deg(angle + step / 2), theta2=np.rad2deg(first + step / 2),
-                edgecolor=group['color'], lw=2, alpha=0.75))
+        ax.add_patch(Arc((0, 0), 2.04, 2.04, theta1=np.rad2deg(angle + step / 2), theta2=np.rad2deg(first + step / 2),
+                edgecolor=NETWORK_COLORS[group['label']], lw=2.3, alpha=0.95))
         angle -= gap
     visible = sorted((e for e in data['edges'] if e['displayed']), key=lambda e: abs(e['estimate']))
     for edge in visible:
@@ -434,18 +442,18 @@ def clinical_network(run, name, data, canvas=None, show_legend=True, ax=None):
         strength = abs(edge['estimate'])
         curve = Path([start, start * 0.28, finish * 0.28, finish], [Path.MOVETO, Path.CURVE4, Path.CURVE4, Path.CURVE4]
         )
-        ax.add_patch(PathPatch(curve, facecolor='none', edgecolor='#356D89' if edge['estimate'] >= 0 else '#AE5965',
-                lw=0.12 + 1.7 * strength**2, alpha=0.025 + 0.50 * strength**2, zorder=1))
+        ax.add_patch(PathPatch(curve, facecolor='none', edgecolor='#4A6FE3' if edge['estimate'] >= 0 else '#DB4325',
+                lw=0.18 + 2.5 * strength**2, alpha=0.045 + 0.80 * strength**2, zorder=1))
     linked = {feature for edge in visible for feature in (edge['feature'], edge['other_feature'])}
     for j, feature in enumerate(features):
         xy, theta = positions[feature], theta_by_feature[feature]
         node = data['nodes'].iloc[j]
         derived = str(node.derived).lower() == 'true'
-        ax.scatter(*xy, s=12, color=node_colors[feature] if feature in linked else 'white',
+        ax.scatter(*xy, s=14, color=node_colors[feature] if feature in linked else 'white',
             marker='s' if derived else 'o', edgecolor=node_colors[feature], lw=0.6, zorder=3)
         degrees = np.rad2deg(theta)
         on_right = np.cos(theta) >= 0
-        label_xy = 1.03 * np.array([np.cos(theta), np.sin(theta)])
+        label_xy = 1.10 * np.array([np.cos(theta), np.sin(theta)])
         ax.text(*label_xy, short.get(feature, V.label(feature)), rotation=degrees if on_right else degrees + 180,
             rotation_mode='anchor', ha='left' if on_right else 'right', va='center', fontsize=6, color=V.INK)
         run.add(6, key, node, 'relationship_plot_data/feature_observations',
