@@ -245,7 +245,8 @@ if (( ! EXPORT_ONLY )); then
           args+=(--device "$DEVICE")
         fi
       fi
-      run "$PY" -u "${scripts[0]}" "${args[@]}"
+      # Guarded expansion: bash <4.4 (macOS /bin/bash 3.2) treats an empty array as unbound under set -u.
+      run "$PY" -u "${scripts[0]}" ${args[@]+"${args[@]}"}
       if [[ "${names[$i]}" == analysis && "$number" == 08 ]]; then plot_data_ready=1; fi
     done
   done

@@ -22,6 +22,7 @@ VERSION = '1.0.0'
 DATASETS = ('mimiciv', 'mimic3-carevue', 'eicu')
 PARTITIONS = ('train', 'validation', 'test')
 METHODS = '0=unfilled; 1=observed; 2=SAITS; 3=forward_fill; 4=training_median'
+PROTECTED_AGE = 91  # Single released value for every age above 89 (HIPAA Safe Harbor older-age group)
 COHORT_DEFINITIONS = {
     'mimiciv': 'mimiciv_culture_iv_antimicrobial_sofa',
     'mimic3-carevue': 'mimic3_carevue_culture_iv_antimicrobial_sofa',
@@ -63,7 +64,8 @@ PATIENT_DOC = {
                   'SHA-256(42:subject_id) ordering. Retained in the atlas; not hospital-held-out. '
                   'Imputation uses each source training/validation set; the encoder uses MIMIC-IV training patients.'),
     'hospital_mortality': ('integer', 'Recorded hospital mortality: 0=alive, 1=dead; retrospective endpoint'),
-    'age': ('number', 'Age in years under source deidentification; 91 can represent a protected older-age group'),
+    'age': ('number', 'Age in years; every age above 89 is released as 91, the protected older-age group '
+                      '(age_is_deidentified=1)'),
     'gender': ('string', 'Recorded source category, not an ordinal model code'),
     'race': ('string', 'Recorded race/ethnicity; vocabularies differ across sources'),
     'admission_type': ('string', 'Source admission category; eICU uses an elective-surgery proxy'),
@@ -80,7 +82,8 @@ PATIENT_DOC = {
     'death_time_is_proxy': ('boolean', 'eICU death/end-of-care proxy flag; '
                            '0 includes patients not reported dead, not proof of an exact death time'),
     'death_time_basis': ('string', 'Source evidence supporting death/end-of-care time'),
-    'age_is_deidentified': ('boolean', 'Explicit age-deidentification flag where supplied'),
+    'age_is_deidentified': ('boolean', '1 when age is the protected value 91 for an age above 89: source-protected '
+                            'ages (MIMIC-IV anchor_age=91, CareVue shifted ages >=300, eICU >89) and derived ages above 89'),
     'onset_offset_minutes': ('number', 'Operational sepsis onset minus ICU admission, in minutes: the later of '
                             'selected suspected-infection time and the first qualifying SOFA assessment. '
                             'Date-only evidence uses the lower-bound onset; its upper bound is not in this CSV. '
@@ -388,12 +391,15 @@ def patient_fields(names, rows, schema, dataset, config):
                 'blank embeddings, coordinates and clusters. This is not an OT solver or support failure.')
         if name == 'age':
             policies = {
-                'mimiciv': 'anchor_age + admission_year - anchor_year; protected anchor_age=91 can yield other released ages',
+                'mimiciv': 'anchor_age + admission_year - anchor_year; ages above 89, including every anchor_age=91 '
+                           'patient, released as 91',
                 'mimic3-carevue': 'Completed years at admission; shifted ages >=300 mapped to 91',
                 'eicu': 'Recorded age; source >89 mapped to 91',
             }
             entry['description'] = policies.get(dataset, 'Source-specific age; MIMIC-IV anchor-year arithmetic, '
-                'CareVue shifted ages >=300 mapped to 91, eICU >89 mapped to 91; see age_is_deidentified')
+                'CareVue shifted ages >=300 mapped to 91, eICU >89 mapped to 91; all ages above 89 released as 91; '
+                'see age_is_deidentified')
+            entry['allowed_values'] = f'18..89; {PROTECTED_AGE}=protected group of ages above 89 (age_is_deidentified=1)'
     return fields
 
 
@@ -560,6 +566,11 @@ def export_source(name, archive, registry, schema, bounds, atlas_inputs, domain,
             require(result['onset_offset_minutes'] is not None, f'{name}: missing onset/ICU origin')
             for column in ('age', 'charlson_comorbidity_index', 'baseline_sofa', 'baseline_pf_ratio'):
                 result[column] = float(static[i, static_names.index(column)])
+            # MIMIC-IV anchor-year arithmetic can exceed 89 with or without anchor_age=91; release one protected group.
+            if result['age'] > 89 or result['age_is_deidentified']:
+                result.update(age=float(PROTECTED_AGE), age_is_deidentified=True)
+            require(result['age'] == PROTECTED_AGE if result['age_is_deidentified'] else 18 <= result['age'] <= 89,
+                    f'{name}: released age outside 18..89 or the protected value {PROTECTED_AGE}')
             patient_rows.append(result)
         archive.table('patients.csv.gz', patient_fields(PATIENT_DOC, patient_rows, schema, name, config),
                       ([row[k] for k in PATIENT_DOC] for row in patient_rows))
